@@ -56,12 +56,28 @@ impl Mine {
 }
 
 
-struct Upgrader {
+pub struct Upgrader {
     multiplier: u16,
     adds: Vec<Tags>,
     adds_vulnerabilities: Vec<Vulnerabilities>,
     removes: Vec<Tags>,
     destroys: Vec<Tags>,
+}
+
+impl Upgrader {
+    pub fn new(multiplier:u16, adds: Option<Vec<Tags>>, adds_vulnerabilities: Option<Vec<Vulnerabilities>>, removes: Option<Vec<Tags>>, destroys: Option<Vec<Tags>>) -> Self {
+        Self {
+            multiplier,
+            adds: adds.unwrap_or_default(),
+            adds_vulnerabilities: adds_vulnerabilities.unwrap_or_default(),
+            removes: removes.unwrap_or_default(),
+            destroys: destroys.unwrap_or_default(),
+        }
+    }
+
+    fn upgrade(&self, ore: &mut Ore) {
+        todo!("Upgrade ore");
+    }
 }
 
 struct Furnace {
