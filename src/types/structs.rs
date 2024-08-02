@@ -6,7 +6,7 @@ use super::enums::{Tags, Vulnerabilities, Multipliers};
 
 #[derive(Debug, Clone)]
 pub struct Mine {
-    drop_rate: u16,
+    drop_rate: f32,
     value: u16,
     adds: Vec<Multipliers>,
     adds_vulnerabilities: Vec<Vulnerabilities>,
@@ -16,7 +16,7 @@ pub struct Mine {
 
 impl Mine {
     pub fn new(
-        drop_rate: u16,
+        drop_rate: f32,
         value: u16,
         adds: Option<Vec<Multipliers>>,              // Make the arguments optional
         adds_vulnerabilities: Option<Vec<Vulnerabilities>>,
@@ -36,6 +36,7 @@ impl Mine {
         let multipliers = self.adds.clone();
         let immunities = &self.adds_immunities;
         let vulnerabilities = &self.adds_vulnerabilities;
+
         Ore::new(value,
              Some(multipliers.clone()),
               None,
@@ -43,7 +44,17 @@ impl Mine {
                 Some(vulnerabilities.clone()),
         )
     }
+
+    pub fn spawn_ores(&self, seconds: u16) -> Vec<Ore> {
+        let mut ores = Vec::new();
+        let amount = (seconds as f32 * self.drop_rate).floor();
+        for i in 0..amount as u16 {
+            ores.push(self.spawn_ore());
+        }
+        ores
+    }
 }
+
 
 struct Upgrader {
     multiplier: u16,
