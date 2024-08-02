@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+
 #[derive(Debug)]
 pub enum Tags {
     Fire(u8),
@@ -29,7 +30,7 @@ pub enum Vulnerabilities {
     Time,
 }
  
-#[derive(Debug, PartialEq, PartialOrd)]
+#[derive(Debug)]
 pub enum Multipliers {
     Fire(u8),
     Polished(u8),
