@@ -85,10 +85,136 @@ impl Upgrader {
     }
 }
 
-struct Furnace {
-    multiplier: u16,
+#[derive(Debug, Clone)]
+pub struct Furnace {
+    multiplier: f32,
+    modifiers: Modifiers,
+    multiplies: bool,
     extra: Vec<Multipliers>,
     refuses: Vec<Tags>,
+}
+impl Furnace {
+    pub fn new(multiplier: f32, modifiers: Modifiers, multiplies: bool, extra: Option<Vec<Multipliers>>, refuses: Option<Vec<Tags>>) -> Self {
+        Self {
+            multiplier,
+            modifiers,
+            multiplies,
+            extra: extra.unwrap_or_default(),
+            refuses: refuses.unwrap_or_default(),
+        }
+    }
+}
+impl Modify for Furnace {
+    fn modify(&mut self, modifier: Modifiers) {
+        println!("before match:{:?}", self);
+        self.to_standard();
+        println!("first match:{:?}", self);
+        match modifier {
+            Modifiers::Standard => {
+                self.from_standard(&modifier);
+            }
+            Modifiers::Overclocked => {
+                self.from_standard(&modifier);
+            }
+            Modifiers::Golden => {
+                self.from_standard(&modifier);
+            }
+            Modifiers::Negative => {
+                self.from_standard(&modifier);
+            }
+            Modifiers::OverclockedGolden => {
+                self.from_standard(&modifier);
+            }
+            Modifiers::OverclockedNegative => {
+                self.from_standard(&modifier);
+            }
+            Modifiers::NegativeGolden => {
+                self.from_standard(&modifier);
+            }
+            Modifiers::OverclockedNegativeGolden => {
+                self.from_standard(&modifier);
+            }
+            _ => (),
+        }
+        println!("second match:{:?}", self);
+    }
+}
+impl ModifyStandard for Furnace {
+    fn to_standard(&mut self){
+        let overclocked_rate = RATES_FROM_STANDARD.get(&Modifiers::Overclocked).unwrap();
+        let golden_rate = RATES_FROM_STANDARD.get(&Modifiers::Golden).unwrap();
+        let negative_rate = RATES_FROM_STANDARD.get(&Modifiers::Negative).unwrap();
+        let overclocked_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden).unwrap();
+        let overclocked_negative_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative).unwrap();
+        let negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden).unwrap();
+        let overclocked_negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden).unwrap();
+        match self.modifiers {
+            Modifiers::Overclocked => {
+                self.multiplier = (self.multiplier+overclocked_rate[1])/overclocked_rate[0];
+            }
+            Modifiers::Golden => {
+                self.multiplier = (self.multiplier+golden_rate[1])/golden_rate[0];
+            }
+            Modifiers::Negative => {
+                self.multiplier = (self.multiplier+negative_rate[1])/negative_rate[0];
+            }
+            Modifiers::OverclockedGolden => {
+                self.multiplier = (self.multiplier+overclocked_golden_rate[1])/overclocked_golden_rate[0];
+            }
+            Modifiers::OverclockedNegative => {
+                self.multiplier = (self.multiplier+overclocked_negative_rate[1])/overclocked_negative_rate[0];
+            }
+            Modifiers::NegativeGolden => {
+                self.multiplier = (self.multiplier+negative_golden_rate[1])/negative_golden_rate[0];
+            }
+            Modifiers::OverclockedNegativeGolden => {
+                self.multiplier = (self.multiplier+overclocked_negative_golden_rate[1])/overclocked_negative_golden_rate[0];
+            }
+            _ => (),
+        }
+        self.modifiers = Modifiers::Standard;
+    }
+    
+    fn from_standard(&mut self, to_modifier: &Modifiers) {
+        let overclocked_rate = RATES_FROM_STANDARD.get(&Modifiers::Overclocked).unwrap();
+        let golden_rate = RATES_FROM_STANDARD.get(&Modifiers::Golden).unwrap();
+        let negative_rate = RATES_FROM_STANDARD.get(&Modifiers::Negative).unwrap();
+        let overclocked_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden).unwrap();
+        let overclocked_negative_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative).unwrap();
+        let negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden).unwrap();
+        let overclocked_negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden).unwrap();
+        match to_modifier {
+            Modifiers::Overclocked => {
+                self.multiplier = (overclocked_rate[0]*self.multiplier)-overclocked_rate[1];
+                self.modifiers = Modifiers::Overclocked;
+            }
+            Modifiers::Golden => {
+                self.multiplier = (golden_rate[0]*self.multiplier)-golden_rate[1];
+                self.modifiers = Modifiers::Golden;
+            }
+            Modifiers::Negative => {
+                self.multiplier = (negative_rate[0]*self.multiplier)-negative_rate[1];
+                self.modifiers = Modifiers::Negative;
+            }
+            Modifiers::OverclockedGolden => {
+                self.multiplier = (overclocked_golden_rate[0]*self.multiplier)-overclocked_golden_rate[1];
+                self.modifiers = Modifiers::OverclockedGolden;
+            }
+            Modifiers::OverclockedNegative => {
+                self.multiplier = (overclocked_negative_rate[0]*self.multiplier)-overclocked_negative_rate[1];
+                self.modifiers = Modifiers::OverclockedNegative;
+            }
+            Modifiers::NegativeGolden => {
+                self.multiplier = (negative_golden_rate[0]*self.multiplier)-negative_golden_rate[1];
+                self.modifiers = Modifiers::NegativeGolden;
+            }
+            Modifiers::OverclockedNegativeGolden => {
+                self.multiplier = (overclocked_negative_golden_rate[0]*self.multiplier)-overclocked_negative_golden_rate[1];
+                self.modifiers = Modifiers::OverclockedNegativeGolden;
+            }
+            _ => (),
+        }
+    }
 }
 #[derive(Debug, Clone)]
 pub struct Ore {
