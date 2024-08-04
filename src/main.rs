@@ -1,5 +1,7 @@
 mod types;
-use types::{enums::{Modifiers, Multipliers, Vulnerabilities}, structs::{Mine, Modify}};
+use std::vec;
+
+use types::{enums::{Modifiers, Multipliers, Tags, Vulnerabilities}, structs::{Upgrader, Mine, Modify}};
 
 fn main() {
     let mut gut_dripper = Mine::new(
@@ -22,6 +24,17 @@ fn main() {
     );
 
     surge_dropper.modify(Modifiers::OverclockedNegativeGolden);
+
+    let mut upgrader = Upgrader::new(
+        67.5,
+        Modifiers::Golden,
+        Some(vec![Tags::Wet, Tags::Wet]),
+        None,
+        None,
+        None
+    );
+    upgrader.modify(Modifiers::Negative);
+    
     // println!("{:?}", mine);
     
 }
