@@ -1,7 +1,26 @@
 mod types;
-use types::{enums::Multipliers, structs::Mine};
+use types::{enums::{Modifiers, Multipliers, Vulnerabilities}, structs::{Mine, Modify}};
 fn main() {
-    let mine = Mine::new(0.6, 1, Some(vec![Multipliers::Fire(5.0), Multipliers::Putrid(1.6)]), None, None);
-    println!("{:?}", mine.spawn_ores(100).len());
+    let mut gut_dripper = Mine::new(
+        2.2,
+        238.0,
+        Modifiers::Golden,
+        Some(vec![Multipliers::Wet(2.0)]),
+        Some(vec![Vulnerabilities::Acid]),
+        None);
+    gut_dripper.modify(Modifiers::OverclockedGolden);
+    gut_dripper.modify(Modifiers::Negative);
+
+    let mut surge_dropper = Mine::new(
+        2.0,
+        6.5,
+        Modifiers::Standard,
+        Some(vec![Multipliers::Wet(1.8)]),
+        None,
+        None
+    );
+
+    surge_dropper.modify(Modifiers::OverclockedNegativeGolden);
+    // println!("{:?}", mine);
 
 }

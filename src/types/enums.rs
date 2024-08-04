@@ -1,5 +1,10 @@
 #![allow(dead_code)]
 
+extern crate lazy_static;
+
+use lazy_static::lazy_static;
+use std::collections::HashMap;
+
 #[derive(Debug, Clone)]
 pub enum Tags {
     Fire(u8),
@@ -42,3 +47,25 @@ pub enum Multipliers {
     Air(f32),
     Time(f32)
 }
+#[derive(Debug, Clone, PartialEq)]
+pub enum Modifiers {
+    Standard,
+    Overclocked,
+    Golden,
+    Negative,
+    OverclockedGolden,
+    OverclockedNegative,
+    NegativeGolden,
+    OverclockedNegativeGolden,
+}
+
+
+// lazy_static! {
+//     static ref MINE_RATES: HashMap<&'static Modifiers, Vec<f32>> = {
+//         let mut m = HashMap::new();
+//         m.insert(Modifiers::Overclocked, vec![]);
+//         m.insert("banana", 1.30);
+//         m.insert("cherry", 3.00);
+//         m
+//     };
+// }
