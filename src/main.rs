@@ -1,5 +1,5 @@
 mod types;
-use types::{enums::{Modifiers, Multipliers, Vulnerabilities, MINE_RATES}, structs::{Mine, Modify}};
+use types::{enums::{Modifiers, Multipliers, Vulnerabilities}, structs::{Mine, Modify}};
 
 fn main() {
     let mut gut_dripper = Mine::new(
