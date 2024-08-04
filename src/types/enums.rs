@@ -47,7 +47,7 @@ pub enum Multipliers {
     Air(f32),
     Time(f32)
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Modifiers {
     Standard,
     Overclocked,
@@ -60,12 +60,20 @@ pub enum Modifiers {
 }
 
 
-// lazy_static! {
-//     static ref MINE_RATES: HashMap<&'static Modifiers, Vec<f32>> = {
-//         let mut m = HashMap::new();
-//         m.insert(Modifiers::Overclocked, vec![]);
-//         m.insert("banana", 1.30);
-//         m.insert("cherry", 3.00);
-//         m
-//     };
-// }
+lazy_static! {
+    #[derive(Debug)]
+    pub static ref MINE_RATES: HashMap<&'static Modifiers, f32> = {
+        let mut m = HashMap::new();
+        m.insert(&Modifiers::Golden, 3.5);
+        m.insert(&Modifiers::Negative, 7.5);
+        m.insert(&Modifiers::NegativeGolden, 26.25);
+        m
+    };
+    pub static ref MINE_DROP_RATES: HashMap<&'static Modifiers, Vec<f32>> = {
+        let mut m = HashMap::new();
+        m.insert(&Modifiers::Overclocked, vec![2.125, 0.025]);
+        m
+    };
+}
+
+

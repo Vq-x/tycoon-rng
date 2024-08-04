@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused)]
 
-use super::enums::{Modifiers, Multipliers, Tags, Vulnerabilities};
+use super::enums::{Modifiers, Multipliers, Tags, Vulnerabilities, MINE_RATES, MINE_DROP_RATES};
 
 
 #[derive(Debug, Clone)]
@@ -113,16 +113,15 @@ impl Ore {
         }
     }
 }
-
 pub trait Modify {
     fn modify(&mut self, modifier: Modifiers);
+}
+trait ModifyMine {
     fn to_standard(&mut self);
     fn to_standard_drop_rate(&mut self);
     fn from_standard(&mut self, to_modifier: &Modifiers);
     fn from_standard_drop_rate(&mut self, to_modifier: &Modifiers);
 }
-
-
 
 impl Modify for Mine {
     fn modify(&mut self, modifier: Modifiers) {
@@ -134,12 +133,10 @@ impl Modify for Mine {
             Modifiers::OverclockedGolden => {
                 self.to_standard_drop_rate();
                 self.to_standard();
-                
             }
             Modifiers::OverclockedNegative => {
                 self.to_standard_drop_rate();
                 self.to_standard();
-                
             }
             Modifiers::NegativeGolden => {
                 self.to_standard_drop_rate();
@@ -147,7 +144,6 @@ impl Modify for Mine {
             Modifiers::OverclockedNegativeGolden => {
                 self.to_standard_drop_rate();
                 self.to_standard();
-                
             }
             _ => {
                 self.to_standard();
@@ -171,12 +167,10 @@ impl Modify for Mine {
             Modifiers::OverclockedGolden => {
                 self.from_standard_drop_rate(&modifier);
                 self.from_standard(&modifier);
-                
             },
             Modifiers::OverclockedNegative => {
                 self.from_standard_drop_rate(&modifier);
                 self.from_standard(&modifier);
-                
             }
             Modifiers::NegativeGolden => {
                 self.from_standard(&modifier);
@@ -184,31 +178,35 @@ impl Modify for Mine {
             Modifiers::OverclockedNegativeGolden => {
                 self.from_standard_drop_rate(&modifier);
                 self.from_standard(&modifier);
-                
             }
         }
         println!("second match:{:?}", self);
     }
+}
 
+impl ModifyMine for Mine {
     fn to_standard(&mut self){
+        let golden_rate = MINE_RATES.get(&Modifiers::Golden).unwrap();
+        let negative_rate = MINE_RATES.get(&Modifiers::Negative).unwrap();
+        let negative_golden_rate = MINE_RATES.get(&Modifiers::NegativeGolden).unwrap();
         match self.modifiers {
             Modifiers::Golden => {
-                self.value /= 3.5;
+                self.value /= golden_rate;
             }
             Modifiers::Negative => {
-                self.value /=7.5;
+                self.value /= negative_rate;
             }
             Modifiers::OverclockedGolden => {
-                self.value /= 3.5;
+                self.value /= golden_rate;
             }
             Modifiers::OverclockedNegative => {
-                self.value /= 7.5;
+                self.value /= negative_rate;
             }
             Modifiers::NegativeGolden => {
-                self.value /= 26.25;
+                self.value /= negative_golden_rate;
             }
             Modifiers::OverclockedNegativeGolden => {
-                self.value /= 26.25;
+                self.value /= negative_golden_rate;
             }
             _ => ()
             // Modifiers::OverclockedNegative => self.value = (self.value + 15.05)/16.05,
@@ -219,24 +217,28 @@ impl Modify for Mine {
     }
     
     fn to_standard_drop_rate(&mut self){
+        let overclocked_rate = MINE_DROP_RATES.get(&Modifiers::Overclocked).unwrap();
         match self.modifiers {
             Modifiers::Overclocked => {
-                self.drop_rate = (self.drop_rate-0.025)/2.125;
+                self.drop_rate = (self.drop_rate-overclocked_rate[1])/overclocked_rate[0];
             }
             Modifiers::OverclockedGolden => {
-                self.drop_rate = (self.drop_rate-0.025)/2.125;
+                self.drop_rate = (self.drop_rate-overclocked_rate[1])/overclocked_rate[0];
             }
             Modifiers::OverclockedNegative => {
-                self.drop_rate = (self.drop_rate-0.025)/2.125;
+                self.drop_rate = (self.drop_rate-overclocked_rate[1])/overclocked_rate[0];
             }
             Modifiers::OverclockedNegativeGolden => {
-                self.drop_rate = (self.drop_rate-0.025)/2.125;
+                self.drop_rate = (self.drop_rate-overclocked_rate[1])/overclocked_rate[0];
             }
             _ => (),
         }
     }
     
     fn from_standard(&mut self, to_modifier: &Modifiers) {
+        let golden_rate = MINE_RATES.get(&Modifiers::Golden).unwrap();
+        let negative_rate = MINE_RATES.get(&Modifiers::Negative).unwrap();
+        let negative_golden_rate = MINE_RATES.get(&Modifiers::NegativeGolden).unwrap();
         match to_modifier {
             Modifiers::Standard => {
                 self.modifiers = Modifiers::Standard;
@@ -245,58 +247,51 @@ impl Modify for Mine {
                 self.modifiers = Modifiers::Overclocked;
             }
             Modifiers::Golden => {
-                self.value *= 3.5;
+                self.value *= golden_rate;
                 self.modifiers = Modifiers::Golden;
             }
             Modifiers::Negative => {
-                self.value *= 7.5;
+                self.value *= negative_rate;
                 self.modifiers = Modifiers::Negative;
             }
             Modifiers::OverclockedGolden => {
-                self.value *= 3.5;
+                self.value *= golden_rate;
                 self.modifiers = Modifiers::OverclockedGolden;
             }
             Modifiers::OverclockedNegative => {
-                self.value *= 7.5;
+                self.value *= negative_rate;
                 self.modifiers = Modifiers::OverclockedNegative;
             }
             Modifiers::NegativeGolden => {
-                self.value *= 26.25;
+                self.value *= negative_golden_rate;
                 self.modifiers = Modifiers::NegativeGolden;
             }
             Modifiers::OverclockedNegativeGolden => {
-                self.value *= 26.25;
+                self.value *= negative_golden_rate;
                 self.modifiers = Modifiers::OverclockedNegativeGolden;
             }
-            // Modifiers::Golden => (value * 3.5) - 2.5,
-            // Modifiers::Negative => (value * 7.5) - 6.5,
-            // Modifiers::OverclockedGolden => (value * 7.49) - 6.49,
-            // Modifiers::OverclockedNegative => (value * 16.05) - 15.05,
-            // Modifiers::NegativeGolden => (value * 26.25) - 25.25,
-            // Modifiers::OverclockedNegativeGolden => (value * 56.175) - 55.175,
         }
     }
     
     fn from_standard_drop_rate(&mut self, to_modifier: &Modifiers) {
+        let overclocked_rate = MINE_DROP_RATES.get(&Modifiers::Overclocked).unwrap();
         match to_modifier {
             Modifiers::Overclocked => {
-                self.drop_rate = (2.125*self.drop_rate)+0.025;
+                self.drop_rate = (overclocked_rate[0]*self.drop_rate)+overclocked_rate[1];
                 self.modifiers = Modifiers::Overclocked;
             }
             Modifiers::OverclockedGolden => {
-                self.drop_rate = (2.125*self.drop_rate)+0.025;
+                self.drop_rate = (overclocked_rate[0]*self.drop_rate)+overclocked_rate[1];
                 self.modifiers = Modifiers::OverclockedGolden;
             }
             Modifiers::OverclockedNegative => {
-                self.drop_rate = (2.125*self.drop_rate)+0.025;
+                self.drop_rate = (overclocked_rate[0]*self.drop_rate)+overclocked_rate[1];
                 self.modifiers = Modifiers::OverclockedNegative;
             }
             Modifiers::OverclockedNegativeGolden => {
-                self.drop_rate = (2.125*self.drop_rate)+0.025;
+                self.drop_rate = (overclocked_rate[0]*self.drop_rate)+overclocked_rate[1];
                 self.modifiers = Modifiers::OverclockedNegativeGolden;
             }
-            // Modifiers::OverclockedNegative => (2.125*value)+0.025,
-            // Modifiers::OverclockedNegativeGolden => (2.125*value)+0.025,
             _ => (),
         }
     }

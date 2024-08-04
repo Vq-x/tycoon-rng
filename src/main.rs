@@ -1,5 +1,6 @@
 mod types;
-use types::{enums::{Modifiers, Multipliers, Vulnerabilities}, structs::{Mine, Modify}};
+use types::{enums::{Modifiers, Multipliers, Vulnerabilities, MINE_RATES}, structs::{Mine, Modify}};
+
 fn main() {
     let mut gut_dripper = Mine::new(
         2.2,
@@ -22,5 +23,5 @@ fn main() {
 
     surge_dropper.modify(Modifiers::OverclockedNegativeGolden);
     // println!("{:?}", mine);
-
+    
 }
