@@ -106,37 +106,25 @@ impl Furnace {
 }
 impl Modify for Furnace {
     fn modify(&mut self, modifier: Modifiers) {
-        println!("before match:{:?}", self);
+        println!("before match: {:?}", self);
         self.to_standard();
-        println!("first match:{:?}", self);
+        println!("first match: {:?}", self);
+
         match modifier {
-            Modifiers::Standard => {
-                self.from_standard(&modifier);
-            }
-            Modifiers::Overclocked => {
-                self.from_standard(&modifier);
-            }
-            Modifiers::Golden => {
-                self.from_standard(&modifier);
-            }
-            Modifiers::Negative => {
-                self.from_standard(&modifier);
-            }
-            Modifiers::OverclockedGolden => {
-                self.from_standard(&modifier);
-            }
-            Modifiers::OverclockedNegative => {
-                self.from_standard(&modifier);
-            }
-            Modifiers::NegativeGolden => {
-                self.from_standard(&modifier);
-            }
-            Modifiers::OverclockedNegativeGolden => {
+            Modifiers::Standard
+            | Modifiers::Overclocked
+            | Modifiers::Golden
+            | Modifiers::Negative
+            | Modifiers::OverclockedGolden
+            | Modifiers::OverclockedNegative
+            | Modifiers::NegativeGolden
+            | Modifiers::OverclockedNegativeGolden => {
                 self.from_standard(&modifier);
             }
             _ => (),
         }
-        println!("second match:{:?}", self);
+
+        println!("second match: {:?}", self);
     }
 }
 impl ModifyStandard for Furnace {
@@ -176,44 +164,19 @@ impl ModifyStandard for Furnace {
     }
     
     fn from_standard(&mut self, to_modifier: &Modifiers) {
-        let overclocked_rate = RATES_FROM_STANDARD.get(&Modifiers::Overclocked).unwrap();
-        let golden_rate = RATES_FROM_STANDARD.get(&Modifiers::Golden).unwrap();
-        let negative_rate = RATES_FROM_STANDARD.get(&Modifiers::Negative).unwrap();
-        let overclocked_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden).unwrap();
-        let overclocked_negative_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative).unwrap();
-        let negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden).unwrap();
-        let overclocked_negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden).unwrap();
-        match to_modifier {
-            Modifiers::Overclocked => {
-                self.multiplier = (overclocked_rate[0]*self.multiplier)-overclocked_rate[1];
-                self.modifiers = Modifiers::Overclocked;
-            }
-            Modifiers::Golden => {
-                self.multiplier = (golden_rate[0]*self.multiplier)-golden_rate[1];
-                self.modifiers = Modifiers::Golden;
-            }
-            Modifiers::Negative => {
-                self.multiplier = (negative_rate[0]*self.multiplier)-negative_rate[1];
-                self.modifiers = Modifiers::Negative;
-            }
-            Modifiers::OverclockedGolden => {
-                self.multiplier = (overclocked_golden_rate[0]*self.multiplier)-overclocked_golden_rate[1];
-                self.modifiers = Modifiers::OverclockedGolden;
-            }
-            Modifiers::OverclockedNegative => {
-                self.multiplier = (overclocked_negative_rate[0]*self.multiplier)-overclocked_negative_rate[1];
-                self.modifiers = Modifiers::OverclockedNegative;
-            }
-            Modifiers::NegativeGolden => {
-                self.multiplier = (negative_golden_rate[0]*self.multiplier)-negative_golden_rate[1];
-                self.modifiers = Modifiers::NegativeGolden;
-            }
-            Modifiers::OverclockedNegativeGolden => {
-                self.multiplier = (overclocked_negative_golden_rate[0]*self.multiplier)-overclocked_negative_golden_rate[1];
-                self.modifiers = Modifiers::OverclockedNegativeGolden;
-            }
-            _ => (),
-        }
+        let rates = match to_modifier {
+            Modifiers::Overclocked => RATES_FROM_STANDARD.get(&Modifiers::Overclocked).unwrap(),
+            Modifiers::Golden => RATES_FROM_STANDARD.get(&Modifiers::Golden).unwrap(),
+            Modifiers::Negative => RATES_FROM_STANDARD.get(&Modifiers::Negative).unwrap(),
+            Modifiers::OverclockedGolden => RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden).unwrap(),
+            Modifiers::OverclockedNegative => RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative).unwrap(),
+            Modifiers::NegativeGolden => RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden).unwrap(),
+            Modifiers::OverclockedNegativeGolden => RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden).unwrap(),
+            _ => return, // Exit early if `to_modifier` does not match any known variant
+        };
+    
+        self.multiplier = (rates[0] * self.multiplier) - rates[1];
+        self.modifiers = to_modifier.clone();
     }
 }
 #[derive(Debug, Clone)]
@@ -506,43 +469,18 @@ impl ModifyStandard for Upgrader {
     }
     
     fn from_standard(&mut self, to_modifier: &Modifiers) {
-        let overclocked_rate = RATES_FROM_STANDARD.get(&Modifiers::Overclocked).unwrap();
-        let golden_rate = RATES_FROM_STANDARD.get(&Modifiers::Golden).unwrap();
-        let negative_rate = RATES_FROM_STANDARD.get(&Modifiers::Negative).unwrap();
-        let overclocked_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden).unwrap();
-        let overclocked_negative_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative).unwrap();
-        let negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden).unwrap();
-        let overclocked_negative_golden_rate = RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden).unwrap();
-        match to_modifier {
-            Modifiers::Overclocked => {
-                self.multiplier = (overclocked_rate[0]*self.multiplier)-overclocked_rate[1];
-                self.modifiers = Modifiers::Overclocked;
-            }
-            Modifiers::Golden => {
-                self.multiplier = (golden_rate[0]*self.multiplier)-golden_rate[1];
-                self.modifiers = Modifiers::Golden;
-            }
-            Modifiers::Negative => {
-                self.multiplier = (negative_rate[0]*self.multiplier)-negative_rate[1];
-                self.modifiers = Modifiers::Negative;
-            }
-            Modifiers::OverclockedGolden => {
-                self.multiplier = (overclocked_golden_rate[0]*self.multiplier)-overclocked_golden_rate[1];
-                self.modifiers = Modifiers::OverclockedGolden;
-            }
-            Modifiers::OverclockedNegative => {
-                self.multiplier = (overclocked_negative_rate[0]*self.multiplier)-overclocked_negative_rate[1];
-                self.modifiers = Modifiers::OverclockedNegative;
-            }
-            Modifiers::NegativeGolden => {
-                self.multiplier = (negative_golden_rate[0]*self.multiplier)-negative_golden_rate[1];
-                self.modifiers = Modifiers::NegativeGolden;
-            }
-            Modifiers::OverclockedNegativeGolden => {
-                self.multiplier = (overclocked_negative_golden_rate[0]*self.multiplier)-overclocked_negative_golden_rate[1];
-                self.modifiers = Modifiers::OverclockedNegativeGolden;
-            }
-            _ => (),
-        }
+        let rates = match to_modifier {
+            Modifiers::Overclocked => RATES_FROM_STANDARD.get(&Modifiers::Overclocked).unwrap(),
+            Modifiers::Golden => RATES_FROM_STANDARD.get(&Modifiers::Golden).unwrap(),
+            Modifiers::Negative => RATES_FROM_STANDARD.get(&Modifiers::Negative).unwrap(),
+            Modifiers::OverclockedGolden => RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden).unwrap(),
+            Modifiers::OverclockedNegative => RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative).unwrap(),
+            Modifiers::NegativeGolden => RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden).unwrap(),
+            Modifiers::OverclockedNegativeGolden => RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden).unwrap(),
+            _ => return, // Exit early if `to_modifier` does not match any known variant
+        };
+    
+        self.multiplier = (rates[0] * self.multiplier) - rates[1];
+        self.modifiers = to_modifier.clone();
     }
 }
