@@ -5,6 +5,15 @@ use super::enums::{
     Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES, RATES_FROM_STANDARD,
 };
 
+pub trait Modify {
+    fn modify(&mut self, modifier: Modifiers);
+}
+
+trait ModifyStandard {
+    fn to_standard(&mut self);
+    fn modify_from_standard(&mut self, to_modifier: &Modifiers);
+}
+
 #[derive(Debug, Clone)]
 pub struct Mine {
     drop_rate: f32,
@@ -13,12 +22,27 @@ pub struct Mine {
     adds_vulnerabilities: Vec<Vulnerabilities>,
     adds_immunities: Vec<Tags>,
     modifiers: Modifiers,
+    rarity: u16,
 }
 
+impl Default for Mine {
+    fn default() -> Self {
+        Self {
+            drop_rate: 1.0,
+            value: 1.0,
+            adds: vec![],
+            adds_vulnerabilities: vec![],
+            adds_immunities: vec![],
+            modifiers: Modifiers::Standard,
+            rarity: 1000,
+        }
+    }
+}
 impl Mine {
     pub fn new(
         drop_rate: f32,
         value: f32,
+        rarity: u16,
         modifiers: Modifiers,
         adds: Option<Vec<Multipliers>>,
         adds_vulnerabilities: Option<Vec<Vulnerabilities>>,
@@ -28,6 +52,7 @@ impl Mine {
             drop_rate,
             value,
             modifiers,
+            rarity,
             adds: adds.unwrap_or_default(),
             adds_vulnerabilities: adds_vulnerabilities.unwrap_or_default(),
             adds_immunities: adds_immunities.unwrap_or_default(),
@@ -50,165 +75,16 @@ impl Mine {
     }
 
     pub fn spawn_ores(&self, seconds: u16) -> Vec<Ore> {
-        let mut ores = Vec::new();
+        let mut ores: Vec<Ore> = Vec::new();
         let amount = (seconds as f32 * self.drop_rate).floor();
-        for i in 0..amount as u16 {
-            ores.push(self.spawn_ore());
-        }
-        ores
+        // for i in 0..amount as u16 {
+        //     ores.push(self.spawn_ore());
+        // }
+        // ores
+        (0..amount as u16).map(|_| self.spawn_ore()).collect()
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct Upgrader {
-    multiplier: f32,
-    modifiers: Modifiers,
-    adds: Vec<Tags>,
-    adds_vulnerabilities: Vec<Vulnerabilities>,
-    removes: Vec<Tags>,
-    destroys: Vec<Tags>,
-}
-
-impl Upgrader {
-    pub fn new(
-        multiplier: f32,
-        modifiers: Modifiers,
-        adds: Option<Vec<Tags>>,
-        adds_vulnerabilities: Option<Vec<Vulnerabilities>>,
-        removes: Option<Vec<Tags>>,
-        destroys: Option<Vec<Tags>>,
-    ) -> Self {
-        Self {
-            multiplier,
-            modifiers,
-            adds: adds.unwrap_or_default(),
-            adds_vulnerabilities: adds_vulnerabilities.unwrap_or_default(),
-            removes: removes.unwrap_or_default(),
-            destroys: destroys.unwrap_or_default(),
-        }
-    }
-
-    fn upgrade(&self, ore: &mut Ore) {
-        todo!("Upgrade ore");
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct Furnace {
-    multiplier: f32,
-    modifiers: Modifiers,
-    multiplies: bool,
-    extra: Vec<Multipliers>,
-    refuses: Vec<Tags>,
-}
-impl Furnace {
-    pub fn new(
-        multiplier: f32,
-        modifiers: Modifiers,
-        multiplies: bool,
-        extra: Option<Vec<Multipliers>>,
-        refuses: Option<Vec<Tags>>,
-    ) -> Self {
-        Self {
-            multiplier,
-            modifiers,
-            multiplies,
-            extra: extra.unwrap_or_default(),
-            refuses: refuses.unwrap_or_default(),
-        }
-    }
-}
-impl Modify for Furnace {
-    fn modify(&mut self, modifier: Modifiers) {
-        println!("before match: {:?}", self);
-        self.to_standard();
-        println!("first match: {:?}", self);
-
-        match modifier {
-            Modifiers::Standard
-            | Modifiers::Overclocked
-            | Modifiers::Golden
-            | Modifiers::Negative
-            | Modifiers::OverclockedGolden
-            | Modifiers::OverclockedNegative
-            | Modifiers::NegativeGolden
-            | Modifiers::OverclockedNegativeGolden => {
-                self.modify_from_standard(&modifier);
-            }
-            _ => (),
-        }
-
-        println!("second match: {:?}", self);
-    }
-}
-impl ModifyStandard for Furnace {
-    fn to_standard(&mut self) {
-        let rates = match self.modifiers {
-            Modifiers::Overclocked => RATES_FROM_STANDARD.get(&Modifiers::Overclocked),
-            Modifiers::Golden => RATES_FROM_STANDARD.get(&Modifiers::Golden),
-            Modifiers::Negative => RATES_FROM_STANDARD.get(&Modifiers::Negative),
-            Modifiers::OverclockedGolden => RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden),
-            Modifiers::OverclockedNegative => {
-                RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative)
-            }
-            Modifiers::NegativeGolden => RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden),
-            Modifiers::OverclockedNegativeGolden => {
-                RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden)
-            }
-            _ => None,
-        };
-
-        if let Some(rate) = rates {
-            self.multiplier = (self.multiplier + rate[1]) / rate[0];
-        }
-
-        self.modifiers = Modifiers::Standard;
-    }
-
-    fn modify_from_standard(&mut self, to_modifier: &Modifiers) {
-        let rates = match RATES_FROM_STANDARD.get(to_modifier) {
-            Some(rate) => rate,
-            None => return, // Exit early if `to_modifier` does not match any known variant
-        };
-
-        self.multiplier = (rates[0] * self.multiplier) - rates[1];
-        self.modifiers = to_modifier.clone();
-    }
-}
-#[derive(Debug, Clone)]
-pub struct Ore {
-    value: f32,
-    multipliers: Vec<Multipliers>,
-    tags: Vec<Tags>,
-    immunities: Vec<Tags>,
-    vulnerabilities: Vec<Vulnerabilities>,
-}
-
-impl Ore {
-    pub fn new(
-        value: f32,
-        multipliers: Option<Vec<Multipliers>>,
-        tags: Option<Vec<Tags>>,
-        immunities: Option<Vec<Tags>>,
-        vulnerabilities: Option<Vec<Vulnerabilities>>,
-    ) -> Self {
-        Self {
-            value,
-            multipliers: multipliers.unwrap_or_default(),
-            tags: tags.unwrap_or_default(),
-            immunities: immunities.unwrap_or_default(),
-            vulnerabilities: vulnerabilities.unwrap_or_default(),
-        }
-    }
-}
-pub trait Modify {
-    fn modify(&mut self, modifier: Modifiers);
-}
-
-trait ModifyStandard {
-    fn to_standard(&mut self);
-    fn modify_from_standard(&mut self, to_modifier: &Modifiers);
-}
 trait ModifyMine {
     fn to_standard(&mut self);
     fn to_standard_drop_rate(&mut self);
@@ -346,6 +222,43 @@ impl ModifyMine for Mine {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct Upgrader {
+    pub multiplier: f32,
+    modifiers: Modifiers,
+    rarity: u16,
+    adds: Vec<Tags>,
+    adds_vulnerabilities: Vec<Vulnerabilities>,
+    removes: Vec<Tags>,
+    destroys: Vec<Tags>,
+}
+
+impl Upgrader {
+    pub fn new(
+        multiplier: f32,
+        modifiers: Modifiers,
+        rarity: u16,
+        adds: Option<Vec<Tags>>,
+        adds_vulnerabilities: Option<Vec<Vulnerabilities>>,
+        removes: Option<Vec<Tags>>,
+        destroys: Option<Vec<Tags>>,
+    ) -> Self {
+        Self {
+            multiplier,
+            modifiers,
+            rarity,
+            adds: adds.unwrap_or_default(),
+            adds_vulnerabilities: adds_vulnerabilities.unwrap_or_default(),
+            removes: removes.unwrap_or_default(),
+            destroys: destroys.unwrap_or_default(),
+        }
+    }
+
+    fn upgrade(&self, ore: &mut Ore) {
+        todo!("Upgrade ore");
+    }
+}
+
 impl Modify for Upgrader {
     fn modify(&mut self, modifier: Modifiers) {
         println!("before match:{:?}", self);
@@ -355,6 +268,20 @@ impl Modify for Upgrader {
         println!("first match:{:?}", self);
         self.modify_from_standard(&modifier);
         println!("second match:{:?}", self);
+    }
+}
+
+impl Default for Upgrader {
+    fn default() -> Self {
+        Self {
+            multiplier: 1.0,
+            modifiers: Modifiers::Standard,
+            rarity: 1000,
+            adds: vec![],
+            adds_vulnerabilities: vec![],
+            removes: vec![],
+            destroys: vec![],
+        }
     }
 }
 
@@ -390,5 +317,129 @@ impl ModifyStandard for Upgrader {
 
         self.multiplier = (rates[0] * self.multiplier) - rates[1];
         self.modifiers = to_modifier.clone();
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Furnace {
+    multiplier: f32,
+    modifiers: Modifiers,
+    rarity: u16,
+    multiplies: bool,
+    extra: Vec<Multipliers>,
+    refuses: Vec<Tags>,
+}
+impl Furnace {
+    pub fn new(
+        multiplier: f32,
+        modifiers: Modifiers,
+        rarity: u16,
+        multiplies: bool,
+        extra: Option<Vec<Multipliers>>,
+        refuses: Option<Vec<Tags>>,
+    ) -> Self {
+        Self {
+            multiplier,
+            modifiers,
+            rarity,
+            multiplies,
+            extra: extra.unwrap_or_default(),
+            refuses: refuses.unwrap_or_default(),
+        }
+    }
+}
+impl Modify for Furnace {
+    fn modify(&mut self, modifier: Modifiers) {
+        println!("before match: {:?}", self);
+        self.to_standard();
+        println!("first match: {:?}", self);
+
+        match modifier {
+            Modifiers::Standard
+            | Modifiers::Overclocked
+            | Modifiers::Golden
+            | Modifiers::Negative
+            | Modifiers::OverclockedGolden
+            | Modifiers::OverclockedNegative
+            | Modifiers::NegativeGolden
+            | Modifiers::OverclockedNegativeGolden => {
+                self.modify_from_standard(&modifier);
+            }
+            _ => (),
+        }
+
+        println!("second match: {:?}", self);
+    }
+}
+impl ModifyStandard for Furnace {
+    fn to_standard(&mut self) {
+        let rates = match self.modifiers {
+            Modifiers::Overclocked => RATES_FROM_STANDARD.get(&Modifiers::Overclocked),
+            Modifiers::Golden => RATES_FROM_STANDARD.get(&Modifiers::Golden),
+            Modifiers::Negative => RATES_FROM_STANDARD.get(&Modifiers::Negative),
+            Modifiers::OverclockedGolden => RATES_FROM_STANDARD.get(&Modifiers::OverclockedGolden),
+            Modifiers::OverclockedNegative => {
+                RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegative)
+            }
+            Modifiers::NegativeGolden => RATES_FROM_STANDARD.get(&Modifiers::NegativeGolden),
+            Modifiers::OverclockedNegativeGolden => {
+                RATES_FROM_STANDARD.get(&Modifiers::OverclockedNegativeGolden)
+            }
+            _ => None,
+        };
+
+        if let Some(rate) = rates {
+            self.multiplier = (self.multiplier + rate[1]) / rate[0];
+        }
+
+        self.modifiers = Modifiers::Standard;
+    }
+
+    fn modify_from_standard(&mut self, to_modifier: &Modifiers) {
+        let rates = match RATES_FROM_STANDARD.get(to_modifier) {
+            Some(rate) => rate,
+            None => return, // Exit early if `to_modifier` does not match any known variant
+        };
+
+        self.multiplier = (rates[0] * self.multiplier) - rates[1];
+        self.modifiers = to_modifier.clone();
+    }
+}
+#[derive(Debug, Clone)]
+pub struct Ore {
+    value: f32,
+    multipliers: Vec<Multipliers>,
+    tags: Vec<Tags>,
+    immunities: Vec<Tags>,
+    vulnerabilities: Vec<Vulnerabilities>,
+}
+
+impl Default for Ore {
+    fn default() -> Self {
+        Self {
+            value: 1.0,
+            multipliers: vec![],
+            tags: vec![],
+            immunities: vec![],
+            vulnerabilities: vec![],
+        }
+    }
+}
+
+impl Ore {
+    pub fn new(
+        value: f32,
+        multipliers: Option<Vec<Multipliers>>,
+        tags: Option<Vec<Tags>>,
+        immunities: Option<Vec<Tags>>,
+        vulnerabilities: Option<Vec<Vulnerabilities>>,
+    ) -> Self {
+        Self {
+            value,
+            multipliers: multipliers.unwrap_or_default(),
+            tags: tags.unwrap_or_default(),
+            immunities: immunities.unwrap_or_default(),
+            vulnerabilities: vulnerabilities.unwrap_or_default(),
+        }
     }
 }
