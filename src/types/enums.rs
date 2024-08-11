@@ -34,7 +34,7 @@ pub enum Vulnerabilities {
     Air,
     Time,
 }
- 
+
 #[derive(Debug, Clone)]
 pub enum Multipliers {
     Fire(f32),
@@ -45,7 +45,7 @@ pub enum Multipliers {
     Acid(f32),
     Magnetic(f32),
     Air(f32),
-    Time(f32)
+    Time(f32),
 }
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Modifiers {
@@ -58,7 +58,6 @@ pub enum Modifiers {
     NegativeGolden,
     OverclockedNegativeGolden,
 }
-
 
 lazy_static! {
     #[derive(Debug)]
@@ -87,7 +86,7 @@ lazy_static! {
         m
     };
 
-    pub static ref RARITY_MULTIPLIERS: HashMap<&'static Modifiers, u16> = {
+    pub static ref RARITY_MULTIPLIERS: HashMap<&'static Modifiers, u64> = {
         let mut m = HashMap::new();
         m.insert(&Modifiers::Standard, 1);
         m.insert(&Modifiers::Overclocked, 10);
@@ -100,5 +99,3 @@ lazy_static! {
         m
     };
 }
-
-

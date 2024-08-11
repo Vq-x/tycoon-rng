@@ -10,7 +10,7 @@ fn main() {
     let mut gut_dripper = Mine::new(
         2.2,
         238.0,
-        1000,
+        1_150_000,
         Modifiers::Golden,
         Some(vec![Multipliers::Wet(2.0)]),
         Some(vec![Vulnerabilities::Acid]),
@@ -26,7 +26,6 @@ fn main() {
         None,
         None,
     );
-
     surge_dropper.modify(Modifiers::OverclockedNegativeGolden);
 
     let mut upgrader = Upgrader::new(
@@ -38,9 +37,7 @@ fn main() {
         None,
         None,
     );
-    println!("{:?}", upgrader.multiplier);
     upgrader.modify(Modifiers::Negative);
-    println!("{:?}", upgrader.multiplier);
 
     let mut furnace = Furnace::new(20.0, Modifiers::Standard, 1000, true, None, None);
     furnace.modify(Modifiers::OverclockedNegativeGolden);

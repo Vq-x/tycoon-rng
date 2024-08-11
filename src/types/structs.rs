@@ -2,7 +2,8 @@
 #![allow(unused)]
 
 use super::enums::{
-    Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES, RATES_FROM_STANDARD,
+    Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES, RARITY_MULTIPLIERS,
+    RATES_FROM_STANDARD,
 };
 
 pub trait Modify {
@@ -22,7 +23,7 @@ pub struct Mine {
     adds_vulnerabilities: Vec<Vulnerabilities>,
     adds_immunities: Vec<Tags>,
     modifiers: Modifiers,
-    rarity: u16,
+    rarity: u64,
 }
 
 impl Default for Mine {
@@ -42,7 +43,7 @@ impl Mine {
     pub fn new(
         drop_rate: f32,
         value: f32,
-        rarity: u16,
+        rarity: u64,
         modifiers: Modifiers,
         adds: Option<Vec<Multipliers>>,
         adds_vulnerabilities: Option<Vec<Vulnerabilities>>,
@@ -148,7 +149,8 @@ impl Modify for Mine {
 
 impl ModifyMine for Mine {
     fn to_standard(&mut self) {
-        let rates = match self.modifiers {
+        // get rate to divide current modifier by itself to turn it into standard
+        let rate = match self.modifiers {
             Modifiers::Golden | Modifiers::OverclockedGolden => MINE_RATES.get(&Modifiers::Golden),
             Modifiers::Negative | Modifiers::OverclockedNegative => {
                 MINE_RATES.get(&Modifiers::Negative)
@@ -158,10 +160,14 @@ impl ModifyMine for Mine {
             }
             _ => None,
         };
-
-        if let Some(rate) = rates {
+        // divide value by rate
+        if let Some(rate) = rate {
             self.value /= rate;
         }
+
+        let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
+
+        self.rarity /= rarity;
 
         self.modifiers = Modifiers::Standard;
     }
@@ -204,6 +210,9 @@ impl ModifyMine for Mine {
                 }
             }
         }
+        let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
+
+        self.rarity *= rarity;
     }
 
     fn apply_standard_drop_rate(&mut self, to_modifier: &Modifiers) {
@@ -226,7 +235,7 @@ impl ModifyMine for Mine {
 pub struct Upgrader {
     pub multiplier: f32,
     modifiers: Modifiers,
-    rarity: u16,
+    rarity: u64,
     adds: Vec<Tags>,
     adds_vulnerabilities: Vec<Vulnerabilities>,
     removes: Vec<Tags>,
@@ -237,7 +246,7 @@ impl Upgrader {
     pub fn new(
         multiplier: f32,
         modifiers: Modifiers,
-        rarity: u16,
+        rarity: u64,
         adds: Option<Vec<Tags>>,
         adds_vulnerabilities: Option<Vec<Vulnerabilities>>,
         removes: Option<Vec<Tags>>,
@@ -306,6 +315,10 @@ impl ModifyStandard for Upgrader {
             self.multiplier = (self.multiplier + rate[1]) / rate[0];
         }
 
+        let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
+
+        self.rarity /= rarity;
+
         self.modifiers = Modifiers::Standard;
     }
 
@@ -316,6 +329,11 @@ impl ModifyStandard for Upgrader {
         };
 
         self.multiplier = (rates[0] * self.multiplier) - rates[1];
+
+        let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
+
+        self.rarity *= rarity;
+
         self.modifiers = to_modifier.clone();
     }
 }
@@ -324,7 +342,7 @@ impl ModifyStandard for Upgrader {
 pub struct Furnace {
     multiplier: f32,
     modifiers: Modifiers,
-    rarity: u16,
+    rarity: u64,
     multiplies: bool,
     extra: Vec<Multipliers>,
     refuses: Vec<Tags>,
@@ -333,7 +351,7 @@ impl Furnace {
     pub fn new(
         multiplier: f32,
         modifiers: Modifiers,
-        rarity: u16,
+        rarity: u64,
         multiplies: bool,
         extra: Option<Vec<Multipliers>>,
         refuses: Option<Vec<Tags>>,
@@ -392,6 +410,10 @@ impl ModifyStandard for Furnace {
             self.multiplier = (self.multiplier + rate[1]) / rate[0];
         }
 
+        let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
+
+        self.rarity /= rarity;
+
         self.modifiers = Modifiers::Standard;
     }
 
@@ -402,6 +424,11 @@ impl ModifyStandard for Furnace {
         };
 
         self.multiplier = (rates[0] * self.multiplier) - rates[1];
+
+        let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
+
+        self.rarity *= rarity;
+
         self.modifiers = to_modifier.clone();
     }
 }
