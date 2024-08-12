@@ -1,11 +1,11 @@
-use super::enums::{Multipliers, Tags, Vulnerabilities};
+use super::enums::{Immunities, Multipliers, Tags, Vulnerabilities};
 
 #[derive(Debug, Clone)]
 pub struct Ore {
     pub value: f32,
     pub multipliers: Vec<Multipliers>,
     pub tags: Vec<Tags>,
-    pub immunities: Vec<Tags>,
+    pub immunities: Vec<Immunities>,
     pub vulnerabilities: Vec<Vulnerabilities>,
     pub destroyed: bool,
 }
@@ -33,10 +33,20 @@ impl Ore {
     }
 
     pub fn remove_tag(&mut self, tag: Tags) {
+        if let Some(index) = self
+            .tags
+            .iter()
+            .position(|x| std::mem::discriminant(x) == std::mem::discriminant(&tag))
+        {
+            self.tags.remove(index);
+        }
+    }
+
+    pub fn remove_tags(&mut self, tag: Tags) {
         self.tags.retain(|x| x != &tag);
     }
 
-    pub fn add_immunity(&mut self, immunity: Tags) {
+    pub fn add_immunity(&mut self, immunity: Immunities) {
         self.immunities.push(immunity);
     }
 

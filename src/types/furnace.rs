@@ -4,6 +4,15 @@ use super::{
     utils::{Modify, ModifyStandard},
 };
 
+/*
+TODO:
+The furnace doesn't multiply the exact multiplier when processing ores,
+it has a little more which could make the program inconsistent when
+introducing bigger numbers.
+Need to figure out how to fix this.
+Whole numbers are fine, but decimals are not.
+*/
+
 #[derive(Debug, Clone)]
 pub struct Furnace {
     pub multiplier: f32,

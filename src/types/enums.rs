@@ -23,6 +23,12 @@ pub enum Tags {
     Perfumed,
     Glitch,
 }
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+pub enum Immunities {
+    Fire,
+    Acid,
+}
+
 #[derive(Debug, Clone)]
 pub enum Vulnerabilities {
     Fire,
@@ -49,6 +55,7 @@ pub enum Multipliers {
     Time(f32),
     Perfumed(f32),
     Glitch(f32),
+    Vulnerable(f32),
 }
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Modifiers {
@@ -62,27 +69,44 @@ pub enum Modifiers {
     OverclockedNegativeGolden,
 }
 
+#[derive(Debug, Clone)]
 pub enum UpgraderTypes {
-    // adds 1x if Fire 2x if None
-    AddsIf(u8, Tags, u8),
+    // adds Wet 1x if Fire 2x if None
+    AddsIfThen(Tags, u8, Tags, u8),
+
+    // adds Ice if Wet
+    AddsIf(Tags, Tags),
+
     //Adds Wet If not on Fire
     AddsIfNot(Tags, Tags),
+
     //replaces Fire with Wet
     Replaces(Tags, Tags),
+
     // extra 1.2x for each fire tag
     ExtraForEach(f32, Tags),
+
+    //extra upgrade logarithmically based on ore value
+    ExtraLogarithmic,
+
     // Multiplies value by 10x if glitch
     MultiplyIf(f32, Tags),
+
     //Extra 3x upgrade after 4.0s
     Overtime(f32, f32),
+
     //Adds Tag
-    Adds(Tags),
+    Adds(Tags, u32),
+
     //Removes Tag
     Removes(Tags),
+
     //Adds Immunity
     AddsImmunity(Tags),
+
     //Adds Vulnerability
     AddsVulnerability(Vulnerabilities),
+
     //destroys ore if tag
     Destroys(Tags),
 }

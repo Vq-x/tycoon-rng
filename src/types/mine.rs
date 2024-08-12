@@ -1,6 +1,6 @@
 use super::{
     enums::{
-        Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES,
+        Immunities, Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES,
         RARITY_MULTIPLIERS,
     },
     ore::Ore,
@@ -13,7 +13,7 @@ pub struct Mine {
     pub value: f32,
     pub adds: Vec<Multipliers>,
     pub adds_vulnerabilities: Vec<Vulnerabilities>,
-    pub adds_immunities: Vec<Tags>,
+    pub adds_immunities: Vec<Immunities>,
     pub modifiers: Modifiers,
     pub rarity: u64,
 }
