@@ -5,7 +5,7 @@ extern crate lazy_static;
 use lazy_static::lazy_static;
 use std::{collections::HashMap, vec};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Tags {
     Fire(u8),
     Time(u8),
@@ -21,6 +21,7 @@ pub enum Tags {
     Fueled,
     Polished,
     Perfumed,
+    Glitch,
 }
 #[derive(Debug, Clone)]
 pub enum Vulnerabilities {
@@ -46,6 +47,8 @@ pub enum Multipliers {
     Magnetic(f32),
     Air(f32),
     Time(f32),
+    Perfumed(f32),
+    Glitch(f32),
 }
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Modifiers {
@@ -57,6 +60,31 @@ pub enum Modifiers {
     OverclockedNegative,
     NegativeGolden,
     OverclockedNegativeGolden,
+}
+
+pub enum UpgraderTypes {
+    // adds 1x if Fire 2x if None
+    AddsIf(u8, Tags, u8),
+    //Adds Wet If not on Fire
+    AddsIfNot(Tags, Tags),
+    //replaces Fire with Wet
+    Replaces(Tags, Tags),
+    // extra 1.2x for each fire tag
+    ExtraForEach(f32, Tags),
+    // Multiplies value by 10x if glitch
+    MultiplyIf(f32, Tags),
+    //Extra 3x upgrade after 4.0s
+    Overtime(f32, f32),
+    //Adds Tag
+    Adds(Tags),
+    //Removes Tag
+    Removes(Tags),
+    //Adds Immunity
+    AddsImmunity(Tags),
+    //Adds Vulnerability
+    AddsVulnerability(Vulnerabilities),
+    //destroys ore if tag
+    Destroys(Tags),
 }
 
 lazy_static! {
