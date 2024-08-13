@@ -55,7 +55,7 @@ impl Furnace {
     // }
     pub fn process_ores(&self, ores: &mut Vec<Ore>) {
         ores.iter_mut()
-            .for_each(|o: &mut Ore| o.multiply_by(self.multiplier))
+            .for_each(|o: &mut Ore| o.multiply_by(self.multiplier as f64))
     }
 }
 impl Modify for Furnace {

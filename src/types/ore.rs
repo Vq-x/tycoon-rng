@@ -2,7 +2,7 @@ use super::enums::{Immunities, Multipliers, Tags, Vulnerabilities};
 
 #[derive(Debug, Clone)]
 pub struct Ore {
-    pub value: f32,
+    pub value: f64,
     pub multipliers: Vec<Multipliers>,
     pub tags: Vec<Tags>,
     pub immunities: Vec<Immunities>,
@@ -24,7 +24,7 @@ impl Default for Ore {
 }
 
 impl Ore {
-    pub fn multiply_by(&mut self, multiplier: f32) {
+    pub fn multiply_by(&mut self, multiplier: f64) {
         self.value *= multiplier;
     }
 

@@ -10,7 +10,7 @@ use super::{
 #[derive(Debug, Clone)]
 pub struct Mine {
     pub drop_rate: f32,
-    pub value: f32,
+    pub value: f64,
     pub adds: Vec<Multipliers>,
     pub adds_vulnerabilities: Vec<Vulnerabilities>,
     pub adds_immunities: Vec<Immunities>,
@@ -53,7 +53,7 @@ impl Mine {
     // }
 
     pub fn spawn_ore(&self) -> Ore {
-        let value: f32 = self.value;
+        let value = self.value;
         let multipliers = &self.adds;
         let immunities = &self.adds_immunities;
         let vulnerabilities = &self.adds_vulnerabilities;
@@ -154,7 +154,7 @@ impl ModifyMine for Mine {
         };
         // divide value by rate
         if let Some(rate) = rate {
-            self.value /= rate;
+            self.value /= *rate as f64;
         }
 
         let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
@@ -185,19 +185,19 @@ impl ModifyMine for Mine {
             }
             Modifiers::Golden | Modifiers::OverclockedGolden => {
                 if let Some(golden_rate) = MINE_RATES.get(&Modifiers::Golden) {
-                    self.value *= golden_rate;
+                    self.value *= *golden_rate as f64;
                     self.modifiers = to_modifier.clone();
                 }
             }
             Modifiers::Negative | Modifiers::OverclockedNegative => {
                 if let Some(negative_rate) = MINE_RATES.get(&Modifiers::Negative) {
-                    self.value *= negative_rate;
+                    self.value *= *negative_rate as f64;
                     self.modifiers = to_modifier.clone();
                 }
             }
             Modifiers::NegativeGolden | Modifiers::OverclockedNegativeGolden => {
                 if let Some(negative_golden_rate) = MINE_RATES.get(&Modifiers::NegativeGolden) {
-                    self.value *= negative_golden_rate;
+                    self.value *= *negative_golden_rate as f64;
                     self.modifiers = to_modifier.clone();
                 }
             }

@@ -1,3 +1,5 @@
+use std::mem;
+
 use super::{
     enums::{
         Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities, RARITY_MULTIPLIERS,
@@ -6,7 +8,19 @@ use super::{
     ore::Ore,
     utils::{Modify, ModifyStandard},
 };
+/*
+NOTES:
+Upgraders like the Forceful Blizzard which replaces Fire with Wet doesn't apply the 2x wet multiplier from the guttation dripper
+the 2x multiplier is only applied when the tag is explicitly added
+For example, the Royal CastleKeep which has 2x fire multiplier but also is fire immune applies the 2x fire multiplier when
+upgraded by the Gates of Calamity which adds the fire tag. It multiplies it by 2x, but doesn't add the tag(cause of the immunity)
 
+The Overtime Tag automatically adds the 3x multiplier after 4.0s, doesn't need a upgrader, the tag name is
+time, if the ore is 1.9x time it will get upgraded by upgraders that have the overtime effect, adding time.
+
+A ore that has 1.6x aired doesn't get the 1.6x multiplier from the Wind Tunnel upgrader if that ore is also on fire.
+
+*/
 #[derive(Debug, Clone)]
 pub struct Upgrader {
     pub multiplier: f32,
@@ -14,10 +28,10 @@ pub struct Upgrader {
     pub modifiers: Modifiers,
     pub rarity: u64,
     pub effects: Vec<UpgraderTypes>,
-    pub adds: Vec<Tags>,
-    pub adds_vulnerabilities: Vec<Vulnerabilities>,
-    pub removes: Vec<Tags>,
-    pub destroys: Vec<Tags>,
+    // pub adds: Vec<Tags>,
+    // pub adds_vulnerabilities: Vec<Vulnerabilities>,
+    // pub removes: Vec<Tags>,
+    // pub destroys: Vec<Tags>,
 }
 
 impl Upgrader {
@@ -25,32 +39,17 @@ impl Upgrader {
         // multiply ore by multiplier
         let mut multiplier = self.multiplier;
 
-        // // add tags to ore if any of the adds tags are present
-        // self.adds.iter().for_each(|tag| ore.add_tag(tag.clone()));
-
-        // // add vulnerabilities to ore if any of the adds_vulnerabilities tags are present
-        // self.adds_vulnerabilities
-        //     .iter()
-        //     .for_each(|vulnerability| ore.add_vulnerability(vulnerability.clone()));
-
-        // // remove tags from ore if any of the removes tags are present
-        // self.removes
-        //     .iter()
-        //     .for_each(|tag| ore.remove_tag(tag.clone()));
-
-        // // destroy ore if any of the destroys tags are present
-        // self.destroys.iter().for_each(|tag| {
-        //     if ore.tags.contains(tag) {
-        //         ore.destroy();
-        //     }
-        // });
         for effect in self.effects.iter() {
             println!("effect: {:?}", effect);
             match effect {
                 // adds Wet 1x if Fire 2x if None
                 UpgraderTypes::AddsIfThen(adder, count, tag_if, count2) => {
                     // if contains tag fire
-                    let times_to_add = if ore.tags.contains(tag_if) {
+                    let times_to_add = if ore
+                        .tags
+                        .iter()
+                        .any(|tag| mem::discriminant(tag) == mem::discriminant(tag_if))
+                    {
                         count
                     } else {
                         count2
@@ -62,7 +61,11 @@ impl Upgrader {
                 }
                 // adds Ice if Wet
                 UpgraderTypes::AddsIf(adder, tag) => {
-                    if ore.tags.contains(tag) {
+                    if ore
+                        .tags
+                        .iter()
+                        .any(|t| mem::discriminant(t) == mem::discriminant(tag))
+                    {
                         ore.add_tag(adder.clone());
                     }
                 }
@@ -74,7 +77,11 @@ impl Upgrader {
                 }
                 // Adds Wet If not on Fire
                 UpgraderTypes::AddsIfNot(adds, not_tag) => {
-                    if !ore.tags.contains(not_tag) {
+                    if !ore
+                        .tags
+                        .iter()
+                        .any(|t| mem::discriminant(t) == mem::discriminant(not_tag))
+                    {
                         ore.add_tag(adds.clone());
                     }
                 }
@@ -103,7 +110,7 @@ impl Upgrader {
                 UpgraderTypes::ExtraLogarithmic => {
                     let eq = log_base(ore.value + 1.0, 1000.0) / 4.0;
                     // ore.multiply_by(eq);
-                    multiplier *= eq;
+                    multiplier *= eq as f32;
                 }
                 UpgraderTypes::Removes(tag) => {
                     ore.remove_tag(tag.clone());
@@ -111,7 +118,42 @@ impl Upgrader {
                 _ => {}
             }
         }
-        ore.multiply_by(multiplier);
+
+        /*
+            check for ore multipliers with upgraders
+            current logic checks that if a upgrader adds a tag to the ore, than the upgrader is of that type tag.
+            When there is a ore with a wet multiplier for example and the upgrader adds a wet tag to the ore
+            the upgrader will automatically apply the multiplier once.
+            This logic only applies to upgrader types Adds, AddsIf, AddsIfThen.
+            TODO:
+                - make sure the upgrader types are sufficient to cover all cases
+        */
+        for ore_mult in ore.multipliers.iter() {
+            if self.effects.iter().any(|effect| match effect {
+                UpgraderTypes::Adds(tag, _) if *tag == ore_mult.get_tag() => true,
+                UpgraderTypes::AddsIf(tag, _) if *tag == ore_mult.get_tag() => true,
+                UpgraderTypes::AddsIfThen(tag, _, _, _) if *tag == ore_mult.get_tag() => true,
+                _ => false,
+            }) {
+                match ore_mult {
+                    Multipliers::Fire(mult)
+                    | Multipliers::Acid(mult)
+                    | Multipliers::Wet(mult)
+                    | Multipliers::Putrid(mult)
+                    | Multipliers::Fueled(mult)
+                    | Multipliers::Magnetic(mult)
+                    | Multipliers::Air(mult)
+                    | Multipliers::Time(mult)
+                    | Multipliers::Polished(mult)
+                    | Multipliers::Perfumed(mult)
+                    | Multipliers::Glitch(mult)
+                    | Multipliers::Vulnerable(mult) => {
+                        multiplier *= mult;
+                    }
+                }
+            }
+        }
+        ore.multiply_by(multiplier as f64);
     }
 }
 
@@ -135,10 +177,10 @@ impl Default for Upgrader {
             modifiers: Modifiers::Standard,
             rarity: 1000,
             effects: vec![],
-            adds: vec![],
-            adds_vulnerabilities: vec![],
-            removes: vec![],
-            destroys: vec![],
+            // adds: vec![],
+            // adds_vulnerabilities: vec![],
+            // removes: vec![],
+            // destroys: vec![],
         }
     }
 }
@@ -187,7 +229,7 @@ impl ModifyStandard for Upgrader {
     }
 }
 
-fn log_base(x: f32, base: f32) -> f32 {
+fn log_base(x: f64, base: f64) -> f64 {
     x.log10() / base.log10()
 }
 
@@ -230,7 +272,7 @@ mod tests {
             ore.tags.iter().filter(|&tag| tag == &Tags::Fueled).count(),
             2
         );
-        assert!(ore.value == 2531.56);
+        assert_eq!(ore.value, 2531.560104370117);
         let steampunk_overdrive = Upgrader {
             multiplier: 26.0,
             rarity: 14_800,
@@ -238,7 +280,7 @@ mod tests {
             ..Default::default()
         };
         steampunk_overdrive.upgrade(&mut ore);
-        assert_eq!(ore.value, 82_565.32);
+        assert_eq!(ore.value, 82_565.32088291191);
         assert_eq!(
             ore.tags.iter().filter(|&tag| tag == &Tags::Fueled).count(),
             2
@@ -264,11 +306,11 @@ mod tests {
             ..Default::default()
         };
         data_encryption.upgrade(&mut ore);
-        assert_eq!(ore.value, 146.11276);
+        assert_eq!(ore.value, 146.1127643585205);
         data_encryption.upgrade(&mut ore);
         assert_eq!(
             (100.0 * ore.value).trunc() / 100.0,
-            (100.0 * 765.41_f32).trunc() / 100.0
+            (100.0 * 765.4_f64).trunc() / 100.0
         );
     }
     #[test]
@@ -345,7 +387,7 @@ mod tests {
                 .count(),
             1
         );
-        assert_eq!((ore.value * 100.0).trunc() / 100.0, 228_596.64);
+        assert_eq!((ore.value * 100.0).trunc() / 100.0, 228_596.63);
         billy_fishtank.upgrade(&mut ore);
         assert_eq!(
             ore.tags
@@ -368,7 +410,7 @@ mod tests {
                 .count(),
             2
         );
-        assert_eq!((ore.value * 100.0).trunc() / 100.0, 29_580_404.0);
+        assert_eq!((ore.value * 100.0).trunc() / 100.0, 29_580_403.18);
         cold_snap.upgrade(&mut ore);
         assert_eq!(
             ore.tags
@@ -398,7 +440,6 @@ mod tests {
                 .count(),
             1
         );
-        assert_eq!((ore.value * 100.0).trunc() / 100.0, 266_223_630.0);
-        data_encryption.upgrade(&mut ore);
+        assert_eq!((ore.value * 100.0).trunc() / 100.0, 266_223_628.65);
     }
 }

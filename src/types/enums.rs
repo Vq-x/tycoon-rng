@@ -8,7 +8,8 @@ use std::{collections::HashMap, vec};
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Tags {
     Fire(u8),
-    Time(u8),
+    // time in seconds and multiplier after those seconds.
+    Time(u8, u32),
     Acid(u8),
     Wet,
     Air,
@@ -22,7 +23,9 @@ pub enum Tags {
     Polished,
     Perfumed,
     Glitch,
+    Vulnerable,
 }
+
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Immunities {
     Fire,
@@ -56,6 +59,24 @@ pub enum Multipliers {
     Perfumed(f32),
     Glitch(f32),
     Vulnerable(f32),
+}
+impl Multipliers {
+    pub fn get_tag(&self) -> Tags {
+        match self {
+            Multipliers::Fire(_) => Tags::Fire(1),
+            Multipliers::Acid(_) => Tags::Acid(1),
+            Multipliers::Wet(_) => Tags::Wet,
+            Multipliers::Putrid(_) => Tags::Putrid,
+            Multipliers::Fueled(_) => Tags::Fueled,
+            Multipliers::Magnetic(_) => Tags::Magnetic,
+            Multipliers::Air(_) => Tags::Air,
+            Multipliers::Time(_) => Tags::Time(1, 0),
+            Multipliers::Polished(_) => Tags::Polished,
+            Multipliers::Perfumed(_) => Tags::Perfumed,
+            Multipliers::Glitch(_) => Tags::Glitch,
+            Multipliers::Vulnerable(_) => Tags::Vulnerable,
+        }
+    }
 }
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Modifiers {
