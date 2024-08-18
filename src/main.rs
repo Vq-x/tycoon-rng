@@ -1,3 +1,4 @@
+mod tests;
 mod types;
 use std::vec;
 
@@ -11,10 +12,10 @@ use types::{
 };
 
 fn main() {
-    let mut gut_dripper = Mine {
+    let gut_dripper = Mine {
         drop_rate: 2.2,
         value: 510.0,
-        rarity: 11_50_0000,
+        rarity: 11_500_000,
         modifiers: Modifiers::Negative,
         adds: vec![Multipliers::Wet(2.0)],
         adds_vulnerabilities: vec![Vulnerabilities::Acid],

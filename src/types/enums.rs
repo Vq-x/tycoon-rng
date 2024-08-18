@@ -123,7 +123,7 @@ pub enum UpgraderTypes {
     Removes(Tags),
 
     //Adds Immunity
-    AddsImmunity(Tags),
+    AddsImmunity(Immunities),
 
     //Adds Vulnerability
     AddsVulnerability(Vulnerabilities),
