@@ -57,9 +57,7 @@ impl Furnace {
         //     .for_each(|o: &mut Ore| o.multiply_by(self.multiplier as f64))
         let mut multiplier = self.multiplier as f64;
         for ore in ores.iter_mut() {
-            println!("in ore loop");
             for effect in self.effects.iter() {
-                println!("in effect loop");
                 match effect {
                     FurnaceTypes::AddForEach(num, tag) => {
                         let amount = ore
@@ -75,7 +73,6 @@ impl Furnace {
                             .iter()
                             .filter(|t| mem::discriminant(*t) == mem::discriminant(tag))
                             .count();
-                        println!("amount: {:?}", amount);
                         multiplier *= (amount as f64) + *if_none as f64;
                     }
                     FurnaceTypes::Refuses(tag) => {

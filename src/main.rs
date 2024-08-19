@@ -12,7 +12,7 @@ use types::{
 };
 
 fn main() {
-    let gut_dripper = Mine {
+    let mut gut_dripper = Mine {
         drop_rate: 2.2,
         value: 510.0,
         rarity: 11_500_000,
@@ -39,6 +39,12 @@ fn main() {
         ..Default::default()
     };
 
+    let wind_tunnel = Upgrader {
+        multiplier: 98.5,
+        modifiers: Modifiers::Negative,
+        ..Default::default()
+    };
+
     let perfect_lawn_negative = Upgrader {
         multiplier: 143.5,
         effects: vec![UpgraderTypes::AddsIfThen(Tags::Wet, 1, Tags::Fire(1), 2)],
@@ -49,7 +55,7 @@ fn main() {
     let mut perfect_lawn_og = perfect_lawn_negative.clone();
     perfect_lawn_og.modify(Modifiers::OverclockedGolden);
 
-    let hand_of_poseidon = Furnace {
+    let mut hand_of_poseidon = Furnace {
         multiplier: 67.5,
         modifiers: Modifiers::Golden,
         rarity: 9_990_000,
@@ -64,12 +70,30 @@ fn main() {
           get applied when those ores go through a upgrader that adds wet.
 
      */
+    gut_dripper.modify(Modifiers::Golden);
     let mut ore = gut_dripper.spawn_ore();
 
     println!("before upgrades: {:?}", ore);
+    // perfect_lawn_negative.upgrade(&mut ore);
+    // println!("{:?}", ore);
+    // perfect_lawn_negative.upgrade(&mut ore);
+    // println!("{:?}", ore);
+    // perfect_lawn_negative.upgrade(&mut ore);
+    // println!("{:?}", ore);
+    // perfect_lawn_negative.upgrade(&mut ore);
+    // println!("{:?}", ore);
     perfect_lawn_negative.upgrade(&mut ore);
-    println!("{:?}", ore);
+    // println!("{:?}", ore);
     perfect_lawn_negative.upgrade(&mut ore);
+    // println!("{:?}", ore);
+    perfect_lawn_negative.upgrade(&mut ore);
+    // println!("{:?}", ore);
+    // perfect_lawn_og.upgrade(&mut ore);
+    // println!("{:?}", ore);
+    // perfect_lawn_og.upgrade(&mut ore);
+    // println!("{:?}", ore);
+    // perfect_lawn_og.upgrade(&mut ore);
     println!("{:?}", ore);
+
     println!("{:?}", hand_of_poseidon.process_ores(&mut vec![ore]));
 }
