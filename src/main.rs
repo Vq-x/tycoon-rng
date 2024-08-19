@@ -3,7 +3,7 @@ mod types;
 use std::vec;
 
 use types::{
-    enums::{Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities},
+    enums::{FurnaceTypes, Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities},
     furnace::Furnace,
     mine::Mine,
     ore::Ore,
@@ -22,15 +22,24 @@ fn main() {
         ..Default::default()
     };
 
-    let mut surge_dropper = Mine {
+    let surge_dropper = Mine {
         drop_rate: 2.0,
         value: 6.5,
         modifiers: Modifiers::Standard,
         adds: vec![Multipliers::Wet(1.8)],
         ..Default::default()
     };
+    let aurora_tundra = Upgrader {
+        multiplier: 342.5,
+        effects: vec![
+            UpgraderTypes::ExtraForEach(1.2, Tags::Fire(1)),
+            UpgraderTypes::Removes(Tags::Fire(1)),
+        ],
+        modifiers: Modifiers::NegativeGolden,
+        ..Default::default()
+    };
 
-    let mut perfect_lawn_negative = Upgrader {
+    let perfect_lawn_negative = Upgrader {
         multiplier: 143.5,
         effects: vec![UpgraderTypes::AddsIfThen(Tags::Wet, 1, Tags::Fire(1), 2)],
         modifiers: Modifiers::Negative,
@@ -39,11 +48,12 @@ fn main() {
 
     let mut perfect_lawn_og = perfect_lawn_negative.clone();
     perfect_lawn_og.modify(Modifiers::OverclockedGolden);
-    let mut furnace = Furnace {
-        multiplier: 20.0,
-        modifiers: Modifiers::Standard,
-        rarity: 1000,
-        multiplies: true,
+
+    let hand_of_poseidon = Furnace {
+        multiplier: 67.5,
+        modifiers: Modifiers::Golden,
+        rarity: 9_990_000,
+        effects: vec![FurnaceTypes::MultipliesByTag(Tags::Wet, 1.0)],
         ..Default::default()
     };
 
@@ -61,34 +71,5 @@ fn main() {
     println!("{:?}", ore);
     perfect_lawn_negative.upgrade(&mut ore);
     println!("{:?}", ore);
-    perfect_lawn_og.upgrade(&mut ore);
-    println!("{:?}", ore);
-    perfect_lawn_og.upgrade(&mut ore);
-    println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    println!("{:?}", ore);
-    perfect_lawn_og.upgrade(&mut ore);
-    println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    println!("{:?}", ore);
-    // gut_dripper.modify(Modifiers::OverclockedNegativeGolden);
-
-    // surge_dropper.modify(Modifiers::OverclockedNegativeGolden);
-
-    // upgrader.modify(Modifiers::Negative);
-
-    // furnace.modify(Modifiers::OverclockedNegativeGolden);
-
-    // ores.iter_mut().for_each(|o: &mut Ore| upgrader.upgrade(o));
-    // println!("----------------------------------");
-    // println!("upgraded ores: {:#?}", ores);
-    // furnace.process_ores(&mut ores);
-    // println!("furnace ores: {:#?}", ores);
-    // println!("{:?}", mine);
+    println!("{:?}", hand_of_poseidon.process_ores(&mut vec![ore]));
 }

@@ -132,6 +132,26 @@ pub enum UpgraderTypes {
     Destroys(Tags),
 }
 
+#[derive(Debug, Clone)]
+pub enum FurnaceTypes {
+    // Refuses wet ores
+    Refuses(Tags),
+
+    // Extra 1.35x if Fueled
+    MultiplyIf(f32, Tags),
+
+    // Extra Multiplier for every Tag: 0.1x
+    ExtraMultiplierEvery(f32),
+
+    //Multiplies ores based on how many wet tags they have, if there are no wet tags then it will be processed at 1
+    MultipliesByTag(Tags, f32),
+
+    // +/- 0.2x value for each Glitch (tag) (up to 6)
+
+    // +0.5x for each tag
+    AddForEach(f32, Tags),
+}
+
 lazy_static! {
     #[derive(Debug)]
     pub static ref MINE_RATES: HashMap<&'static Modifiers, f32> = {

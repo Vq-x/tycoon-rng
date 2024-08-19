@@ -12,7 +12,7 @@ use super::{
 NOTES:
 Upgraders like the Forceful Blizzard which replaces Fire with Wet doesn't apply the 2x wet multiplier from the guttation dripper
 the 2x multiplier is only applied when the tag is explicitly added
-For example, the Royal CastleKeep which has 2x fire multiplier but also is fire immune applies the 2x fire multiplier when
+For example, the Royal CastleKeep which has 2x fire multiplier, but also is fire immune, applies the 2x fire multiplier when
 upgraded by the Gates of Calamity which adds the fire tag. It multiplies it by 2x, but doesn't add the tag(cause of the immunity)
 
 The Overtime Tag automatically adds the 3x multiplier after 4.0s, doesn't need a upgrader, the tag name is

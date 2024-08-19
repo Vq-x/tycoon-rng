@@ -1,5 +1,8 @@
+use core::num;
+use std::mem;
+
 use super::{
-    enums::{Modifiers, Multipliers, Tags, RARITY_MULTIPLIERS, RATES_FROM_STANDARD},
+    enums::{FurnaceTypes, Modifiers, Multipliers, Tags, RARITY_MULTIPLIERS, RATES_FROM_STANDARD},
     ore::Ore,
     utils::{Modify, ModifyStandard},
 };
@@ -18,9 +21,7 @@ pub struct Furnace {
     pub multiplier: f32,
     pub modifiers: Modifiers,
     pub rarity: u64,
-    pub multiplies: bool,
-    pub extra: Vec<Multipliers>,
-    pub refuses: Vec<Tags>,
+    pub effects: Vec<FurnaceTypes>,
 }
 
 impl Default for Furnace {
@@ -29,9 +30,7 @@ impl Default for Furnace {
             multiplier: 1.0,
             modifiers: Modifiers::Standard,
             rarity: 1000,
-            multiplies: false,
-            extra: vec![],
-            refuses: vec![],
+            effects: vec![],
         }
     }
 }
@@ -53,9 +52,59 @@ impl Furnace {
     //         refuses: refuses.unwrap_or_default(),
     //     }
     // }
-    pub fn process_ores(&self, ores: &mut Vec<Ore>) {
-        ores.iter_mut()
-            .for_each(|o: &mut Ore| o.multiply_by(self.multiplier as f64))
+    pub fn process_ores(&self, ores: &mut Vec<Ore>) -> f64 {
+        // ores.iter_mut()
+        //     .for_each(|o: &mut Ore| o.multiply_by(self.multiplier as f64))
+        let mut multiplier = self.multiplier as f64;
+        for ore in ores.iter_mut() {
+            println!("in ore loop");
+            for effect in self.effects.iter() {
+                println!("in effect loop");
+                match effect {
+                    FurnaceTypes::AddForEach(num, tag) => {
+                        let amount = ore
+                            .tags
+                            .iter()
+                            .filter(|t| mem::discriminant(*t) == mem::discriminant(tag))
+                            .count();
+                        multiplier += (amount as f64) * (*num as f64);
+                    }
+                    FurnaceTypes::MultipliesByTag(tag, if_none) => {
+                        let mut amount = ore
+                            .tags
+                            .iter()
+                            .filter(|t| mem::discriminant(*t) == mem::discriminant(tag))
+                            .count();
+                        println!("amount: {:?}", amount);
+                        multiplier *= (amount as f64) + *if_none as f64;
+                    }
+                    FurnaceTypes::Refuses(tag) => {
+                        if ore
+                            .tags
+                            .iter()
+                            .any(|t| mem::discriminant(t) == mem::discriminant(tag))
+                        {
+                            ore.destroy();
+                        }
+                    }
+                    FurnaceTypes::MultiplyIf(num, tag) => {
+                        if ore
+                            .tags
+                            .iter()
+                            .any(|t| mem::discriminant(t) == mem::discriminant(tag))
+                        {
+                            multiplier *= *num as f64;
+                        }
+                    }
+                    FurnaceTypes::ExtraMultiplierEvery(num) => {
+                        multiplier += (*num as f64) * (ore.tags.len() as f64);
+                    }
+                }
+            }
+            ore.multiply_by(multiplier);
+        }
+        let sum: f64 = ores.iter().filter(|o| !o.destroyed).map(|o| o.value).sum();
+        sum
     }
 }
 impl Modify for Furnace {
