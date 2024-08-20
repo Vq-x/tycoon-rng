@@ -3,7 +3,7 @@ use super::{
         Immunities, Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES,
         RARITY_MULTIPLIERS,
     },
-    ore::Ore,
+    ore::{Ore, Ores},
     utils::Modify,
 };
 
@@ -75,9 +75,11 @@ impl Mine {
         }
     }
 
-    pub fn spawn_ores(&self, seconds: u16) -> Vec<Ore> {
+    pub fn spawn_ores(&self, seconds: u16) -> Ores {
         let amount = (seconds as f32 * self.drop_rate).floor();
-        (0..amount as u16).map(|_| self.spawn_ore()).collect()
+        let group: Vec<Ore> = (0..amount as u16).map(|_| self.spawn_ore()).collect();
+        let ores = Ores { ores: group };
+        ores
     }
 }
 

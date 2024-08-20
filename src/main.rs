@@ -12,6 +12,13 @@ use types::{
 };
 
 fn main() {
+    let mut digital_anomaly = Mine {
+        drop_rate: 1.0,
+        value: 400.0,
+        rarity: 2_500_000,
+        modifiers: Modifiers::Standard,
+        ..Default::default()
+    };
     let mut gut_dripper = Mine {
         drop_rate: 2.2,
         value: 510.0,
@@ -27,6 +34,17 @@ fn main() {
         value: 6.5,
         modifiers: Modifiers::Standard,
         adds: vec![Multipliers::Wet(1.8)],
+        ..Default::default()
+    };
+    let cursed_siege = Upgrader {
+        multiplier: 300.6,
+        modifiers: Modifiers::OverclockedGolden,
+        rarity: 22_700_000,
+        effects: vec![
+            UpgraderTypes::Adds(Tags::Fueled, 1),
+            UpgraderTypes::MultiplyIf(2.0, Tags::Aired),
+            UpgraderTypes::Removes(Tags::Aired),
+        ],
         ..Default::default()
     };
     let aurora_tundra = Upgrader {
@@ -45,7 +63,7 @@ fn main() {
         ..Default::default()
     };
 
-    let perfect_lawn_negative = Upgrader {
+    let mut perfect_lawn_negative = Upgrader {
         multiplier: 143.5,
         effects: vec![UpgraderTypes::AddsIfThen(Tags::Wet, 1, Tags::Fire(1), 2)],
         modifiers: Modifiers::Negative,
@@ -70,30 +88,38 @@ fn main() {
           get applied when those ores go through a upgrader that adds wet.
 
      */
-    gut_dripper.modify(Modifiers::Golden);
-    let mut ore = gut_dripper.spawn_ore();
 
-    println!("before upgrades: {:?}", ore);
-    // perfect_lawn_negative.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    // perfect_lawn_negative.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    // perfect_lawn_negative.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    // perfect_lawn_negative.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    perfect_lawn_negative.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    // perfect_lawn_og.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    // perfect_lawn_og.upgrade(&mut ore);
-    // println!("{:?}", ore);
-    // perfect_lawn_og.upgrade(&mut ore);
-    println!("{:?}", ore);
+    // gut_dripper.modify(Modifiers::OverclockedGolden);
+    // let mut ores = gut_dripper.spawn_ores(10);
+    // gut_dripper.modify(Modifiers::Negative);
+    // let ores2 = gut_dripper.spawn_ores(10);
+    // ores.extend(ores2.iter().cloned());
+    let mut ores = digital_anomaly.spawn_ores(10);
+    println!("ores amount: {:?}", ores.ores.len());
+    println!("before upgrades: {:?}", ores.ores);
+    // ores.iter_mut().for_each(|ore| cursed_siege.upgrade(ore));
+    ores.upgrade(&cursed_siege);
+    println!("{:?}", ores.ores);
 
-    println!("{:?}", hand_of_poseidon.process_ores(&mut vec![ore]));
+    // ores.iter_mut()
+    //     .for_each(|ore| perfect_lawn_negative.upgrade(ore));
+    ores.upgrade(&perfect_lawn_negative);
+    println!("{:?}", ores.ores);
+
+    // ores.iter_mut()
+    //     .for_each(|ore| perfect_lawn_negative.upgrade(ore));
+    ores.upgrade(&perfect_lawn_negative);
+    println!("{:?}", ores.ores);
+
+    // ores.iter_mut()
+    //     .for_each(|ore| perfect_lawn_negative.upgrade(ore));
+    ores.upgrade(&perfect_lawn_negative);
+    println!("{:?}", ores.ores);
+    // println!(
+    //     "one ore: {:?} one ore times total amount: {:?}",
+    //     hand_of_poseidon.process_ores(&mut vec![ores[0].clone()]),
+    //     hand_of_poseidon.process_ores(&mut vec![ores[0].clone()]) * ores.len() as f64
+    // );
+    println!("ores amount: {:?}", ores.ores.len());
+    println!("{:?}", hand_of_poseidon.process_ores(&mut ores));
 }

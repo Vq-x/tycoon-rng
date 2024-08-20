@@ -3,7 +3,7 @@ use std::mem;
 
 use super::{
     enums::{FurnaceTypes, Modifiers, Multipliers, Tags, RARITY_MULTIPLIERS, RATES_FROM_STANDARD},
-    ore::Ore,
+    ore::{Ore, Ores},
     utils::{Modify, ModifyStandard},
 };
 
@@ -35,28 +35,9 @@ impl Default for Furnace {
     }
 }
 impl Furnace {
-    // pub fn new(
-    //     multiplier: f32,
-    //     modifiers: Modifiers,
-    //     rarity: u64,
-    //     multiplies: bool,
-    //     extra: Option<Vec<Multipliers>>,
-    //     refuses: Option<Vec<Tags>>,
-    // ) -> Self {
-    //     Self {
-    //         multiplier,
-    //         modifiers,
-    //         rarity,
-    //         multiplies,
-    //         extra: extra.unwrap_or_default(),
-    //         refuses: refuses.unwrap_or_default(),
-    //     }
-    // }
-    pub fn process_ores(&self, ores: &mut Vec<Ore>) -> f64 {
-        // ores.iter_mut()
-        //     .for_each(|o: &mut Ore| o.multiply_by(self.multiplier as f64))
-        let mut multiplier = self.multiplier as f64;
-        for ore in ores.iter_mut() {
+    pub fn process_ores(&self, ores: &mut Ores) -> f64 {
+        for ore in ores.ores.iter_mut() {
+            let mut multiplier = self.multiplier as f64;
             for effect in self.effects.iter() {
                 match effect {
                     FurnaceTypes::AddForEach(num, tag) => {
@@ -100,7 +81,12 @@ impl Furnace {
             }
             ore.multiply_by(multiplier);
         }
-        let sum: f64 = ores.iter().filter(|o| !o.destroyed).map(|o| o.value).sum();
+        let sum: f64 = ores
+            .ores
+            .iter()
+            .filter(|o| !o.destroyed)
+            .map(|o| o.value)
+            .sum();
         sum
     }
 }

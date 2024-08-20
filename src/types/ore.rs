@@ -1,5 +1,16 @@
-use super::enums::{Immunities, Multipliers, Tags, Vulnerabilities};
+use std::vec;
 
+use super::{
+    enums::{Immunities, Multipliers, Tags, Vulnerabilities},
+    upgrader::Upgrader,
+};
+/*
+    TODO:
+        - add a struct for ores in a vector
+        - implement functions that combine two vectors of ores
+        - implement functions to upgrade all ores in a vector with given upgrader
+        -
+*/
 #[derive(Debug, Clone)]
 pub struct Ore {
     pub value: f64,
@@ -60,5 +71,20 @@ impl Ore {
 
     pub fn destroy(&mut self) {
         self.destroyed = true;
+    }
+}
+
+pub struct Ores {
+    pub ores: Vec<Ore>,
+}
+impl Ores {
+    pub fn upgrade(&mut self, upgrader: &Upgrader) {
+        self.ores.iter_mut().for_each(|ore| upgrader.upgrade(ore));
+    }
+    pub fn combine(&mut self, other: &mut Ores) {
+        self.ores.append(&mut other.ores);
+    }
+    pub fn add(&mut self, other: Ore) {
+        self.ores.push(other);
     }
 }
