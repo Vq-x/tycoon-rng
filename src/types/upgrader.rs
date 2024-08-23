@@ -20,6 +20,9 @@ time, if the ore is 1.9x time it will get upgraded by upgraders that have the ov
 
 A ore that has 1.6x aired doesn't get the 1.6x multiplier from the Wind Tunnel upgrader if that ore is also on fire.
 
+
+TODO:
+    - make timed tags work
 */
 #[derive(Debug, Clone)]
 pub struct Upgrader {

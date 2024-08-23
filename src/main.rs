@@ -1,12 +1,12 @@
 mod tests;
 mod types;
-use std::vec;
+use std::{borrow::BorrowMut, vec};
 
 use types::{
     enums::{FurnaceTypes, Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities},
     furnace::Furnace,
     mine::Mine,
-    ore::Ore,
+    ore::{Ore, Ores},
     upgrader::Upgrader,
     utils::Modify,
 };
@@ -88,31 +88,19 @@ fn main() {
           get applied when those ores go through a upgrader that adds wet.
 
      */
-
-    // gut_dripper.modify(Modifiers::OverclockedGolden);
-    // let mut ores = gut_dripper.spawn_ores(10);
-    // gut_dripper.modify(Modifiers::Negative);
-    // let ores2 = gut_dripper.spawn_ores(10);
-    // ores.extend(ores2.iter().cloned());
-    let mut ores = digital_anomaly.spawn_ores(10);
+    let mut ores = Ores { ores: vec![] };
+    gut_dripper.modify(Modifiers::OverclockedGolden);
+    ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
+    gut_dripper.modify(Modifiers::Negative);
+    ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
     println!("ores amount: {:?}", ores.ores.len());
     println!("before upgrades: {:?}", ores.ores);
-    // ores.iter_mut().for_each(|ore| cursed_siege.upgrade(ore));
     ores.upgrade(&cursed_siege);
     println!("{:?}", ores.ores);
-
-    // ores.iter_mut()
-    //     .for_each(|ore| perfect_lawn_negative.upgrade(ore));
     ores.upgrade(&perfect_lawn_negative);
     println!("{:?}", ores.ores);
-
-    // ores.iter_mut()
-    //     .for_each(|ore| perfect_lawn_negative.upgrade(ore));
     ores.upgrade(&perfect_lawn_negative);
     println!("{:?}", ores.ores);
-
-    // ores.iter_mut()
-    //     .for_each(|ore| perfect_lawn_negative.upgrade(ore));
     ores.upgrade(&perfect_lawn_negative);
     println!("{:?}", ores.ores);
     // println!(
