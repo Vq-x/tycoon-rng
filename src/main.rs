@@ -128,7 +128,4 @@ fn main() {
         "human readable: {:?}",
         human_readable(hand_of_poseidon.process_ores(&mut ores) / 10.0 * 0.69)
     );
-    let serialized = to_string(&perfect_lawn_og).unwrap();
-    let deserialized: Upgrader = from_str(&serialized).unwrap();
-    println!("upgrader: {}", serialized);
 }
