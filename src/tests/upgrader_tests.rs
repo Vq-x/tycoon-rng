@@ -2,8 +2,12 @@
 mod tests {
     use std::vec;
 
+    use strum::IntoEnumIterator;
+
     use crate::types::{
-        enums::{Immunities, Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities},
+        enums::{
+            Immunities, Modifiers, Multipliers, Tags, UpgraderTypes, Upgraders, Vulnerabilities,
+        },
         mine::Mine,
         upgrader::Upgrader,
     };
@@ -201,5 +205,14 @@ mod tests {
             1
         );
         assert_eq!((ore.value * 100.0).trunc() / 100.0, 266_223_628.65);
+    }
+    #[test]
+    fn test_upgrader_json() {
+        for upgrader in Upgraders::iter() {
+            let upgrader =
+                Upgrader::get_upgrader(upgrader, Modifiers::OverclockedNegativeGolden).unwrap();
+            assert!(upgrader.rarity > 0);
+            assert!(upgrader.multiplier > 0.0);
+        }
     }
 }

@@ -5,6 +5,9 @@ extern crate lazy_static;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, vec};
+use strum_macros::EnumIter;
+
+use super::upgrader::Upgrader;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Tags {
@@ -180,6 +183,102 @@ pub enum FurnaceTypes {
 
     // +0.5x for each tag
     AddForEach(f32, Tags),
+}
+
+#[derive(Debug, Deserialize, EnumIter)]
+pub enum Upgraders {
+    OreSoaker,
+    OrePolisher,
+    FlameBlaster,
+    HydrogenTank,
+    SteamEngine,
+    Magnetron,
+    AcidPools,
+    Hourglass,
+    Microscope,
+    Macroscope,
+    BubblegumStockpile,
+    ExtremeHeat,
+    BillyFishtank,
+    PerfectLawn,
+    ColdSnap,
+    EntityZero,
+    ForbiddenBreeze,
+    CausticLab,
+    SunstonePylon,
+    WindTunnel,
+    GatesOfCalamity,
+    AuroralTundra,
+    DataEncryption,
+    OreHacker,
+    HeavenlyRuins,
+    SteampunkOverdrive,
+    CreatorsPlayground,
+    PizzaParadise,
+    StormSurge,
+    SlimeRefinery,
+    ParadisiacFlower,
+    MetropunkClockwork,
+    MoonlightTemple,
+    AbyssalChains,
+    DraconicNecromancy,
+    BloodstruckRitual,
+    CursedSiege,
+    ElectricalAnnihilation,
+    SkeletalWarlock,
+    DysonSphere,
+    ForcefulBlizzard,
+    SimulationError,
+    ResonanceSynthesia,
+}
+impl Upgraders {
+    pub fn get_string(&self) -> String {
+        match self {
+            Upgraders::OreSoaker => "ore_soaker".to_string(),
+            Upgraders::OrePolisher => "ore_polisher".to_string(),
+            Upgraders::FlameBlaster => "flame_blaster".to_string(),
+            Upgraders::HydrogenTank => "hydrogen_tank".to_string(),
+            Upgraders::SteamEngine => "steam_engine".to_string(),
+            Upgraders::Magnetron => "magnetron".to_string(),
+            Upgraders::AcidPools => "acid_pools".to_string(),
+            Upgraders::Hourglass => "hourglass".to_string(),
+            Upgraders::Microscope => "microscope".to_string(),
+            Upgraders::Macroscope => "macroscope".to_string(),
+            Upgraders::BubblegumStockpile => "bubblegum_stockpile".to_string(),
+            Upgraders::ExtremeHeat => "extreme_heat".to_string(),
+            Upgraders::BillyFishtank => "billy_fishtank".to_string(),
+            Upgraders::PerfectLawn => "perfect_lawn".to_string(),
+            Upgraders::ColdSnap => "cold_snap".to_string(),
+            Upgraders::EntityZero => "entity_zero".to_string(),
+            Upgraders::ForbiddenBreeze => "forbidden_breeze".to_string(),
+            Upgraders::CausticLab => "caustic_lab".to_string(),
+            Upgraders::SunstonePylon => "sunstone_pylon".to_string(),
+            Upgraders::WindTunnel => "wind_tunnel".to_string(),
+            Upgraders::GatesOfCalamity => "gates_of_calamity".to_string(),
+            Upgraders::AuroralTundra => "auroral_tundra".to_string(),
+            Upgraders::DataEncryption => "data_encryption".to_string(),
+            Upgraders::OreHacker => "ore_hacker".to_string(),
+            Upgraders::HeavenlyRuins => "heavenly_ruins".to_string(),
+            Upgraders::SteampunkOverdrive => "steampunk_overdrive".to_string(),
+            Upgraders::CreatorsPlayground => "creators_playground".to_string(),
+            Upgraders::PizzaParadise => "pizza_paradise".to_string(),
+            Upgraders::StormSurge => "storm_surge".to_string(),
+            Upgraders::SlimeRefinery => "slime_refinery".to_string(),
+            Upgraders::ParadisiacFlower => "paradisiac_flower".to_string(),
+            Upgraders::MetropunkClockwork => "metropunk_clockwork".to_string(),
+            Upgraders::MoonlightTemple => "moonlight_temple".to_string(),
+            Upgraders::AbyssalChains => "abyssal_chains".to_string(),
+            Upgraders::DraconicNecromancy => "draconic_necromancy".to_string(),
+            Upgraders::BloodstruckRitual => "bloodstruck_ritual".to_string(),
+            Upgraders::CursedSiege => "cursed_siege".to_string(),
+            Upgraders::ElectricalAnnihilation => "electrical_annihilation".to_string(),
+            Upgraders::SkeletalWarlock => "skeletal_warlock".to_string(),
+            Upgraders::DysonSphere => "dyson_sphere".to_string(),
+            Upgraders::ForcefulBlizzard => "forceful_blizzard".to_string(),
+            Upgraders::SimulationError => "simulation_error".to_string(),
+            Upgraders::ResonanceSynthesia => "resonance_synthesia".to_string(),
+        }
+    }
 }
 
 lazy_static! {

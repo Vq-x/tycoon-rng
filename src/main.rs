@@ -1,3 +1,4 @@
+mod json_files;
 mod tests;
 mod types;
 mod utils;
@@ -5,7 +6,8 @@ use serde_json::{from_str, to_string, to_string_pretty};
 use std::{borrow::BorrowMut, vec};
 use types::{
     enums::{
-        FurnaceTypes, Immunities, Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities,
+        FurnaceTypes, Immunities, Modifiers, Multipliers, Tags, UpgraderTypes, Upgraders,
+        Vulnerabilities,
     },
     furnace::Furnace,
     mine::Mine,
