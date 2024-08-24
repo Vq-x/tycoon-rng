@@ -1,11 +1,14 @@
-use std::mem;
+use std::{collections::HashMap, mem};
 
 use serde::{Deserialize, Serialize};
+use serde_json::{from_str, Error};
+
+use crate::json_files::file::get_json_text;
 
 use super::{
     enums::{
-        Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities, RARITY_MULTIPLIERS,
-        RATES_FROM_STANDARD,
+        Modifiers, Multipliers, Tags, UpgraderTypes, Upgraders, Vulnerabilities,
+        RARITY_MULTIPLIERS, RATES_FROM_STANDARD,
     },
     ore::Ore,
     utils::{Modify, ModifyStandard},
@@ -39,6 +42,26 @@ pub struct Upgrader {
 }
 
 impl Upgrader {
+    pub fn get_upgrader(upgrader_name: Upgraders, modifier: Modifiers) -> Result<Upgrader, Error> {
+        // Read the JSON file content
+        let file_text =
+            get_json_text("src/json_files/upgraders.json").expect("could not find file");
+
+        // Deserialize the file into a HashMap<String, Upgrader>
+        let json_map: HashMap<String, Upgrader> = from_str(&file_text)?;
+
+        // Convert the enum variant to a string
+        let key = upgrader_name.get_string();
+
+        // Get the Upgrader corresponding to the upgrader_name
+        let mut upgrader = json_map
+            .get(&key)
+            .expect(&format!("Could not find upgrader of type {}", key))
+            .clone();
+        upgrader.modify(modifier);
+        // Return the upgrader
+        Ok(upgrader)
+    }
     pub fn upgrade(&self, ore: &mut Ore) {
         // multiply ore by multiplier
         let mut multiplier = self.multiplier;
@@ -263,8 +286,7 @@ impl ModifyStandard for Upgrader {
 
         self.multiplier = (rates[0] * self.multiplier) - rates[1];
 
-        let rarity = RARITY_MULTIPLIERS.get(&self.modifiers).unwrap();
-
+        let rarity = RARITY_MULTIPLIERS.get(to_modifier).unwrap();
         self.rarity *= rarity;
 
         self.modifiers = to_modifier.clone();
