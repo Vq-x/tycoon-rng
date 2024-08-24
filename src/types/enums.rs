@@ -3,9 +3,10 @@
 extern crate lazy_static;
 
 use lazy_static::lazy_static;
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, vec};
 
-#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
 pub enum Tags {
     Fire(u8),
     // time in seconds and multiplier after those seconds.
@@ -49,13 +50,13 @@ impl Tags {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
 pub enum Immunities {
     Fire,
     Acid,
 }
 
-#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
 pub enum Vulnerabilities {
     Fire,
     Polished,
@@ -68,7 +69,7 @@ pub enum Vulnerabilities {
     Time,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Multipliers {
     Fire(f32),
     Polished(f32),
@@ -101,7 +102,7 @@ impl Multipliers {
         }
     }
 }
-#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
 pub enum Modifiers {
     Standard,
     Overclocked,
@@ -113,7 +114,7 @@ pub enum Modifiers {
     OverclockedNegativeGolden,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum UpgraderTypes {
     // adds Wet 1x if Fire 2x if None
     AddsIfThen(Tags, u8, Tags, u8),
@@ -155,7 +156,7 @@ pub enum UpgraderTypes {
     Destroys(Tags),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FurnaceTypes {
     // Refuses wet ores
     Refuses(Tags),

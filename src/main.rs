@@ -1,6 +1,7 @@
 mod tests;
 mod types;
 mod utils;
+use serde_json::{from_str, to_string, to_string_pretty};
 use std::{borrow::BorrowMut, vec};
 use types::{
     enums::{
@@ -108,16 +109,10 @@ fn main() {
     gut_dripper.modify(Modifiers::Golden);
     ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
     ores.combine(wind_turbine.spawn_ores(10).borrow_mut());
-    println!("ores amount: {:?}", ores.ores.len());
-    println!("before upgrades: {:?}", ores.ores);
     ores.upgrade(&cursed_siege);
-    println!("{:?}", ores.ores);
     ores.upgrade(&perfect_lawn_negative);
-    println!("{:?}", ores.ores);
     ores.upgrade(&perfect_lawn_negative);
-    println!("{:?}", ores.ores);
     ores.upgrade(&perfect_lawn_negative);
-    println!("{:?}", ores.ores);
     println!("ores amount: {:?}", ores.ores.len());
     println!(
         "destroyed: {:?}",
@@ -131,4 +126,7 @@ fn main() {
         "human readable: {:?}",
         human_readable(hand_of_poseidon.process_ores(&mut ores) / 10.0 * 0.69)
     );
+    let serialized = to_string(&perfect_lawn_og).unwrap();
+    let deserialized: Upgrader = from_str(&serialized).unwrap();
+    println!("upgrader: {}", serialized);
 }

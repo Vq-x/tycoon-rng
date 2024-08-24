@@ -1,5 +1,7 @@
 use std::mem;
 
+use serde::{Deserialize, Serialize};
+
 use super::{
     enums::{
         Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities, RARITY_MULTIPLIERS,
@@ -24,7 +26,7 @@ A ore that has 1.6x aired doesn't get the 1.6x multiplier from the Wind Tunnel u
 TODO:
     - make timed tags work
 */
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Upgrader {
     pub multiplier: f32,
     pub multipliers: Vec<Multipliers>,
@@ -43,7 +45,6 @@ impl Upgrader {
         let mut multiplier = self.multiplier;
 
         for effect in self.effects.iter() {
-            println!("effect: {:?}", effect);
             match effect {
                 // adds Wet 1x if Fire 2x if None
                 UpgraderTypes::AddsIfThen(adder, count, tag_if, count2) => {
