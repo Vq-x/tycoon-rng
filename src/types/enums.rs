@@ -5,6 +5,7 @@ extern crate lazy_static;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, vec};
+use strum_macros::EnumIter;
 
 use super::upgrader::Upgrader;
 
@@ -184,7 +185,7 @@ pub enum FurnaceTypes {
     AddForEach(f32, Tags),
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, EnumIter)]
 pub enum Upgraders {
     OreSoaker,
     OrePolisher,

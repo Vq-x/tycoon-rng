@@ -28,9 +28,11 @@ fn main() {
         // modifiers: Modifiers::Negative,
         ..Default::default()
     };
-    let ore_soaker =
-        Upgrader::get_upgrader(Upgraders::OreSoaker, Modifiers::OverclockedNegativeGolden).unwrap();
-    println!("{:?}", ore_soaker);
+    let upgrader2 =
+        Upgrader::get_upgrader(Upgraders::PerfectLawn, Modifiers::OverclockedNegativeGolden)
+            .unwrap();
+    println!("{:?}", upgrader2);
+    println!("{:?}", human_readable(upgrader2.rarity));
     // upgrader.modify(Modifiers::Standard);
     println!("{}", to_string(&upgrader).unwrap());
 }
