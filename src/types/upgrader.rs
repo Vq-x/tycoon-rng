@@ -170,7 +170,7 @@ impl Upgrader {
                     | Multipliers::Putrid(mult)
                     | Multipliers::Fueled(mult)
                     | Multipliers::Magnetic(mult)
-                    | Multipliers::Air(mult)
+                    | Multipliers::Aired(mult)
                     | Multipliers::Time(mult)
                     | Multipliers::Polished(mult)
                     | Multipliers::Perfumed(mult)

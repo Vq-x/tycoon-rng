@@ -1,4 +1,4 @@
-use std::vec;
+use std::{any::Any, vec};
 
 use super::{
     enums::{Immunities, Multipliers, Tags, Vulnerabilities},
@@ -40,6 +40,19 @@ impl Ore {
     }
 
     pub fn add_tag(&mut self, tag: Tags) {
+        if tag
+            .get_immunity()
+            .is_some_and(|immunity| self.immunities.contains(&immunity))
+        {
+            return;
+        }
+
+        if tag
+            .get_vulnerability()
+            .is_some_and(|vulnerability| self.vulnerabilities.contains(&vulnerability))
+        {
+            self.destroy();
+        }
         self.tags.push(tag);
     }
 
@@ -74,6 +87,7 @@ impl Ore {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Ores {
     pub ores: Vec<Ore>,
 }

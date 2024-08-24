@@ -25,6 +25,29 @@ pub enum Tags {
     Glitch,
     Vulnerable,
 }
+impl Tags {
+    pub fn get_immunity(&self) -> Option<Immunities> {
+        match self {
+            Tags::Fire(_) => Some(Immunities::Fire),
+            Tags::Acid(_) => Some(Immunities::Acid),
+            _ => None,
+        }
+    }
+    pub fn get_vulnerability(&self) -> Option<Vulnerabilities> {
+        match self {
+            Tags::Fire(_) => Some(Vulnerabilities::Fire),
+            Tags::Polished => Some(Vulnerabilities::Polished),
+            Tags::Wet => Some(Vulnerabilities::Wet),
+            Tags::Putrid => Some(Vulnerabilities::Putrid),
+            Tags::Fueled => Some(Vulnerabilities::Fueled),
+            Tags::Acid(_) => Some(Vulnerabilities::Acid),
+            Tags::Magnetic => Some(Vulnerabilities::Magnetic),
+            Tags::Air => Some(Vulnerabilities::Air),
+            Tags::Time(_, _) => Some(Vulnerabilities::Time),
+            _ => None,
+        }
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Immunities {
@@ -32,7 +55,7 @@ pub enum Immunities {
     Acid,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub enum Vulnerabilities {
     Fire,
     Polished,
@@ -54,7 +77,7 @@ pub enum Multipliers {
     Fueled(f32),
     Acid(f32),
     Magnetic(f32),
-    Air(f32),
+    Aired(f32),
     Time(f32),
     Perfumed(f32),
     Glitch(f32),
@@ -69,7 +92,7 @@ impl Multipliers {
             Multipliers::Putrid(_) => Tags::Putrid,
             Multipliers::Fueled(_) => Tags::Fueled,
             Multipliers::Magnetic(_) => Tags::Magnetic,
-            Multipliers::Air(_) => Tags::Air,
+            Multipliers::Aired(_) => Tags::Air,
             Multipliers::Time(_) => Tags::Time(1, 0),
             Multipliers::Polished(_) => Tags::Polished,
             Multipliers::Perfumed(_) => Tags::Perfumed,

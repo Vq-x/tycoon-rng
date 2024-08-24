@@ -1,15 +1,18 @@
 mod tests;
 mod types;
+mod utils;
 use std::{borrow::BorrowMut, vec};
-
 use types::{
-    enums::{FurnaceTypes, Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities},
+    enums::{
+        FurnaceTypes, Immunities, Modifiers, Multipliers, Tags, UpgraderTypes, Vulnerabilities,
+    },
     furnace::Furnace,
     mine::Mine,
     ore::{Ore, Ores},
     upgrader::Upgrader,
     utils::Modify,
 };
+use utils::human_readable;
 
 fn main() {
     let mut digital_anomaly = Mine {
@@ -78,7 +81,16 @@ fn main() {
         modifiers: Modifiers::Golden,
         rarity: 9_990_000,
         effects: vec![FurnaceTypes::MultipliesByTag(Tags::Wet, 1.0)],
-        ..Default::default()
+    };
+
+    let mut wind_turbine = Mine {
+        drop_rate: 1.9,
+        value: 315.0,
+        rarity: 3_430_000,
+        modifiers: Modifiers::NegativeGolden,
+        adds: vec![Multipliers::Aired(2.0)],
+        adds_vulnerabilities: vec![Vulnerabilities::Wet],
+        adds_immunities: vec![Immunities::Fire],
     };
 
     // let mut ores = gut_dripper.spawn_ores(50);
@@ -93,6 +105,9 @@ fn main() {
     ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
     gut_dripper.modify(Modifiers::Negative);
     ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
+    gut_dripper.modify(Modifiers::Golden);
+    ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
+    ores.combine(wind_turbine.spawn_ores(10).borrow_mut());
     println!("ores amount: {:?}", ores.ores.len());
     println!("before upgrades: {:?}", ores.ores);
     ores.upgrade(&cursed_siege);
@@ -103,11 +118,17 @@ fn main() {
     println!("{:?}", ores.ores);
     ores.upgrade(&perfect_lawn_negative);
     println!("{:?}", ores.ores);
-    // println!(
-    //     "one ore: {:?} one ore times total amount: {:?}",
-    //     hand_of_poseidon.process_ores(&mut vec![ores[0].clone()]),
-    //     hand_of_poseidon.process_ores(&mut vec![ores[0].clone()]) * ores.len() as f64
-    // );
     println!("ores amount: {:?}", ores.ores.len());
-    println!("{:?}", hand_of_poseidon.process_ores(&mut ores));
+    println!(
+        "destroyed: {:?}",
+        ores.ores.iter().filter(|o| o.destroyed).count()
+    );
+    println!(
+        "regular: {:?}",
+        human_readable(hand_of_poseidon.process_ores(&mut ores) / 10.0)
+    );
+    println!(
+        "human readable: {:?}",
+        human_readable(hand_of_poseidon.process_ores(&mut ores) / 10.0 * 0.69)
+    );
 }

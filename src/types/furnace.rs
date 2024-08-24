@@ -36,6 +36,7 @@ impl Default for Furnace {
 }
 impl Furnace {
     pub fn process_ores(&self, ores: &mut Ores) -> f64 {
+        let mut ores = ores.clone();
         for ore in ores.ores.iter_mut() {
             let mut multiplier = self.multiplier as f64;
             for effect in self.effects.iter() {
