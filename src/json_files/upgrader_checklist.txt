@@ -1,0 +1,214 @@
+Ore Soaker — 1 in 5 X
+	Multiplies ores by 1.5x and extinguishes Fire
+	Adds Wet if it's not on Fire
+
+
+Ore Polisher — 1 in 16 X
+	Multiplies ores by 2x
+	Adds Polished
+
+
+Flame Blaster — 1 in 32 X
+	Multiplies ores by 2.5x
+	Sets ore on Fire (4s)
+
+Hydrogen Tank — 1 in 52 X
+	Multiplies ores by 3x
+	Adds Aired
+	Adds Fire Vulnerable
+
+Steam Engine — 1 in 72 X
+	Multiplies ores by 3.5x
+	Adds Fueled (2)
+
+
+Magnetron — 1 in 104 X
+	Multiplies ores by 5x
+	Adds Magnetic
+
+Acid Pools — 1 in 150 X
+	Multiplies ores by 5.5x
+	Adds Acid (4s)
+
+Hourglass — 1 in 170 X
+	Multiplies ores by 2.4x
+	Adds Overtime [x3.0] (4s)
+
+Microscope — 1 in 216 X
+	Multiplies ores by 7.5x
+	Reduces ore size by 0.6x
+Macroscope — 1 in 442 X
+	Multiplies ores by 8x
+	Increases ore size by 1.3x
+
+Bubblegum Stockpile — 1 in 586 X
+	Multiplies ores by 8.5x
+	Makes ore Bouncy
+
+Extreme Heat — 1 in 820 X
+	Multiplies ores by 9.19x
+	Sets ore on Fire (2.5s)
+
+Billy's Fishtank — 1 in 712 X
+	Removes Fire
+	Adds Wet (2x)
+
+
+Perfect Lawn — 1 in 9,600 X
+	Removes Fire
+	Adds Wet (1x if on Fire, 2x if not)
+
+Cold Snap — 1 in 10,500 X
+	Adds Ice if Wet
+	2.0x if Aired
+
+Entity Zero — 1 in 1,232 TODO: add percentage chance to destroy ores!
+	Multiplies ores by 12x
+	20% chance to destroy ores
+
+Forbidden Breeze — 1 in 2,042 X
+	Multiplies ores by 13x
+	Adds Putrid
+	Adds Aired
+
+Caustic Lab — 1 in 3,638 X
+	Multiplies ores by 17x
+	Adds Acid (3s)
+
+Sunstone Pylon — 1 in 5,391 X
+	Multiplies ores by 20x
+	Adds Fire Vulnerable
+
+Wind Tunnel — 1 in 5,500 X
+	Adds Fire if on fire
+	Removes Wet
+	Adds Aired
+
+Gates of Calamity — 1 in 7,114 X
+	Multiplies ores by 24x
+	Sets ore on Fire (4s)
+
+Auroral Tundra — 1 in 8,643
+	Multiplies ores by 14x
+	Extinguishes Fire
+	1.2x multiplier for every Fire tag
+
+Data Encryption — 1 in 9,825 X
+	Extra upgrade based on ore value
+	2x Magnetic
+
+Ore Hacker — 1 in 3,660,000 TODO: add percentage chance to destroy ores!
+	Multiplies ores by 40x
+	40% chance of destroying ores if they're not Vulnerable
+	1.5x for each Vulnerable tag
+
+Heavenly Ruins — 1 in 11,432 TODO: add removing a random Vulnerable!
+	Multiplies ores by 28x
+	Removes a random Vulnerable
+
+Steampunk Overdrive — 1 in 14,870 X
+	Multiplies ores by 26x
+	1.12x multiplier for each Fueled tag
+
+Creator's Playground — 1 in 17,890 X
+	1.2x Magnetic
+	1.4x Time
+
+Pizza Paradise — 1 in 18,000 X
+	Adds Fire (4s) if ore isn't Wet
+	Removes Wet
+	And adds Aired
+
+Storm Surge — 1 in 22,190 X
+	Multiplies ores by 33x
+	Destroys Wet
+	Adds Magnetic
+	Removes Acid
+
+Slime Refinery — 1 in 23,921 TODO: add destroying percentage of ores!
+	Multiplies ores by ?x
+	Destroys Wet ores
+	Extra 1.5x if Putrid
+	Adds Putrid
+	Destroys 15% of ores
+
+Paradisiac Flower — 1 in 26,442 X
+	Multiplies ores by 19x
+	Adds Perfumed
+	0.1x multiplier if the ore has Putrid
+	but 0x if the ore is Vulnerable
+
+Metropunk Clockwork — 1 in 26,915 TODO: adds chance to destroy ores!
+	Multiplies ores by 29x
+	Adds Fueled (3)
+	Adds Aired
+	Adds Magnetic Vulnerable to it
+	45% chance to destroy ores
+
+Moonlight Temple — 1 in 36,812 X
+	Multiplies ores by 19x
+	Adds Polished
+	Adds Overtime [x1.5] (12s)
+	Destroys Acid Vulnerable ores
+
+Abyssal Chains — 1 in 50,200 X
+	Multiplies ores by 33x
+	Adds Wet
+	Removes Acid and Fire
+
+Draconic Necromancy — 1 in 68,910 X
+	Multiplies ores by 36x
+	Adds Magnetic
+	Adds Aired
+	Adds Fire (4s)
+	Destroys Timed or Fueled ores
+
+Bloodstruck Ritual — 1 in 71,120 X
+	Has a base multiplier of x40 and applies these multipliers:
+	0.3x Time
+	0.6x Wet or Aired
+	1.2x Putrid
+	Fire
+	or Acid
+	1.6x Vulnerable
+	If an ore has more than one of these tags, the tag multipliers get multiplied. For example, if an ore has Overtime and Vulnerable, then it will result in a x0.48 multiplier.
+
+Cursed Siege — 1 in 91,060 X
+	Multiplies ores by 41x
+	Adds Fueled
+	2x multiplier on Aired ores
+	Removes Aired
+
+Electrical Annihilation — 1 in 126,500 TODO: add percentage chance to destroy ores!
+	Multiplies ores by 43x
+	Adds Magnetic
+	2.5x multiplier on Acid ores
+	Destroys ores on Fire or 20% randomly
+	
+Skeletal Warlock — 1 in 167,900 TODO: add percentage chance to destroy ores!
+	Multiplies ores by 46x
+	2x multiplier on Magnetic ores
+	Destroys ores on Fire or 30% randomly
+
+Dyson Sphere — 1 in 251,900 TODO: add percentage chance to destroy ores!
+	Multiplies ores by 52x
+	And a chance to add these effects:
+	60%: Adds Fueled (2)
+	40%: Adds Acid (3s)
+	20%: Destroys the ore
+	10%: x10 upgrade
+	1%: x100 upgrade
+
+Forceful Blizzard — 1 in 421,400 X
+	Multiplies ores by 30x
+	Adds Ice to Wet ores
+	Extinguishes and adds Wet to ores on Fire
+
+Simulation Error — 1 in 5,050,500 X
+	Multiplies ores by 50x
+	10x if Glitched
+
+Resonance Synthesia — 1 in 7,500,000 X
+	Multiplies ores by 80x
+	Adds Shield to Glitch ores
+	0.75x value if Putrid

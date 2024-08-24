@@ -6,11 +6,11 @@ use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, vec};
 
-#[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Tags {
-    Fire(u8),
+    Fire(f32),
     // time in seconds and multiplier after those seconds.
-    Time(u8, u32),
+    Time(u8, f32),
     Acid(u8),
     Wet,
     Air,
@@ -87,14 +87,14 @@ pub enum Multipliers {
 impl Multipliers {
     pub fn get_tag(&self) -> Tags {
         match self {
-            Multipliers::Fire(_) => Tags::Fire(1),
+            Multipliers::Fire(_) => Tags::Fire(1.0),
             Multipliers::Acid(_) => Tags::Acid(1),
             Multipliers::Wet(_) => Tags::Wet,
             Multipliers::Putrid(_) => Tags::Putrid,
             Multipliers::Fueled(_) => Tags::Fueled,
             Multipliers::Magnetic(_) => Tags::Magnetic,
             Multipliers::Aired(_) => Tags::Air,
-            Multipliers::Time(_) => Tags::Time(1, 0),
+            Multipliers::Time(_) => Tags::Time(1, 1.0),
             Multipliers::Polished(_) => Tags::Polished,
             Multipliers::Perfumed(_) => Tags::Perfumed,
             Multipliers::Glitch(_) => Tags::Glitch,
@@ -116,7 +116,7 @@ pub enum Modifiers {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum UpgraderTypes {
-    // adds Wet 1x if Fire 2x if None
+    // adds Wet 1x if Fire 2x if no Fire
     AddsIfThen(Tags, u8, Tags, u8),
 
     // adds Ice if Wet
@@ -137,6 +137,9 @@ pub enum UpgraderTypes {
     // Multiplies value by 10x if glitch
     MultiplyIf(f32, Tags),
 
+    // Multiplies one multiplier if in group
+    MultiplyIfGrouped(f32, Vec<Tags>),
+
     //Extra 3x upgrade after 4.0s
     Overtime(f32, f32),
 
@@ -154,6 +157,9 @@ pub enum UpgraderTypes {
 
     //destroys ore if tag
     Destroys(Tags),
+
+    //destroys ore if vulnerability
+    DestroysVulnerability(Vulnerabilities),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
