@@ -86,7 +86,7 @@ mod tests {
         let mut ore = shadow_veil.spawn_ore();
         let flame_blaster = Upgrader {
             multiplier: 12.25,
-            effects: vec![UpgraderTypes::Adds(Tags::Fire(3), 1)],
+            effects: vec![UpgraderTypes::Adds(Tags::Fire(3.0), 1)],
             ..Default::default()
         };
         let wind_tunnel = Upgrader {
@@ -95,7 +95,7 @@ mod tests {
             effects: vec![
                 UpgraderTypes::Adds(Tags::Aired, 1),
                 UpgraderTypes::Removes(Tags::Wet),
-                UpgraderTypes::Replaces(Tags::Fire(3), Tags::Fire(3)),
+                UpgraderTypes::Replaces(Tags::Fire(3.0), Tags::Fire(3.0)),
             ],
             ..Default::default()
         };
@@ -104,7 +104,7 @@ mod tests {
             multiplier: 129.4,
             effects: vec![
                 UpgraderTypes::Adds(Tags::Wet, 2),
-                UpgraderTypes::Removes(Tags::Fire(1)),
+                UpgraderTypes::Removes(Tags::Fire(1.0)),
             ],
             ..Default::default()
         };

@@ -1,0 +1,378 @@
+{
+  "ore_soaker": {
+    "multiplier": 1.5,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 5,
+    "effects": [
+      { "AddsIfNot": ["Wet", { "Fire": 1 }] },
+      { "Removes": { "Fire": 1 } }
+    ]
+  },
+  "ore_polisher": {
+    "multiplier": 2.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 16,
+    "effects": [{ "Adds": ["Polished", 1] }]
+  },
+  "flame_blaster": {
+    "multiplier": 2.5,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 32,
+    "effects": [{ "Adds": [{ "Fire": 4 }, 1] }]
+  },
+  "hydrogen_tank": {
+    "multiplier": 3.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 52,
+    "effects": [{ "Adds": ["Aired", 1] }, { "AddsVulnerability": "Fire" }]
+  },
+  "steam_engine": {
+    "multiplier": 3.5,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 72,
+    "effects": [{ "Adds": ["Fueled", 2] }]
+  },
+  "magnetron": {
+    "multiplier": 5.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 104,
+    "effects": [{ "Adds": ["Magnetic", 1] }]
+  },
+  "acid_pools": {
+    "multiplier": 5.5,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 150,
+    "effects": [{ "Adds": [{ "Acid": 4 }, 1] }]
+  },
+  "hourglass": {
+    "multiplier": 2.4,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 170,
+    "effects": [{ "Overtime": [3.0, 4.0] }]
+  },
+  "microscope": {
+    "multiplier": 7.5,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 216,
+    "effects": []
+  },
+  "macroscope": {
+    "multiplier": 8.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 442,
+    "effects": []
+  },
+  "bubblegum_stockpile": {
+    "multiplier": 8.5,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 586,
+    "effects": []
+  },
+  "extreme_heat": {
+    "multiplier": 29.69,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 820,
+    "effects": [{ "Adds": [{ "Fire": 2.5 }, 1] }]
+  },
+  "billy_fishtank": {
+    "multiplier": 9.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 712,
+    "effects": [{ "Adds": ["Wet", 2] }, { "Removes": { "Fire": 1.0 } }]
+  },
+  "perfect_lawn": {
+    "multiplier": 20.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 9600,
+    "effects": [
+      { "AddsIfThen": ["Wet", 1, { "Fire": 1.0 }, 2] },
+      { "Removes": { "Fire": 1.0 } }
+    ]
+  },
+  "cold_snap": {
+    "multiplier": 9.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 10500,
+    "effects": [{ "AddsIf": ["Ice", "Wet"] }, { "MultiplyIf": [2.0, "Aired"] }]
+  },
+  "entity_zero": {
+    "multiplier": 12.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 1232,
+    "effects": []
+  },
+  "forbidden_breeze": {
+    "multiplier": 13.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 2042,
+    "effects": [{ "Adds": ["Putrid", 1] }, { "Adds": ["Aired", 1] }]
+  },
+  "caustic_lab": {
+    "multiplier": 17.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 3638,
+    "effects": [{ "Adds": [{ "Acid": 3 }, 1] }]
+  },
+  "sunstone_pylon": {
+    "multiplier": 20.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 5391,
+    "effects": [{ "AddsVulnerability": "Fire" }]
+  },
+  "wind_tunnel": {
+    "multiplier": 14.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 5500,
+    "effects": [
+      { "AddsIf": [{ "Fire": 3.0 }, { "Fire": 1.0 }] },
+      { "Removes": "Wet" },
+      { "Adds": ["Aired", 1] }
+    ]
+  },
+  "gates_of_calamity": {
+    "multiplier": 24.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 7114,
+    "effects": [{ "Adds": [{ "Fire": 4.0 }, 1] }]
+  },
+  "auroral_tundra": {
+    "multiplier": 14.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 8643,
+    "effects": [
+      { "ExtraForEach": [1.2, { "Fire": 1.0 }] },
+      { "Removes": { "Fire": 1.0 } }
+    ]
+  },
+  "data_encryption": {
+    "multiplier": 9.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 9825,
+    "effects": ["ExtraLogarithmic", { "MultiplyIf": [2.0, "Magnetic"] }]
+  },
+  "ore_hacker": {
+    "multiplier": 40.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 3660000,
+    "effects": [{ "ExtraForEach": [1.5, "Vulnerable"] }]
+  },
+  "heavenly_ruins": {
+    "multiplier": 28.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 11432,
+    "effects": []
+  },
+  "steampunk_overdrive": {
+    "multiplier": 26.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 14870,
+    "effects": [{ "ExtraForEach": [1.12, "Fueled"] }]
+  },
+  "creators_playground": {
+    "multiplier": 34.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 17890,
+    "effects": [
+      { "MultiplyIf": [1.2, "Magnetic"] },
+      { "MultiplyIf": [1.4, { "Time": [1, 1.0] }] }
+    ]
+  },
+  "pizza_paradise": {
+    "multiplier": 15.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 18000,
+    "effects": [
+      { "AddsIfNot": [{ "Fire": 4.0 }, "Wet"] },
+      { "Removes": "Wet" },
+      { "Adds": ["Aired", 1] }
+    ]
+  },
+  "storm_surge": {
+    "multiplier": 33.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 22190,
+    "effects": [
+      { "Destroys": "Wet" },
+      { "Adds": ["Magnetic", 1] },
+      { "Removes": { "Acid": 1 } }
+    ]
+  },
+  "slime_refinery": {
+    "multiplier": 28.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 23921,
+    "effects": [
+      { "Destroys": "Wet" },
+      { "MultiplyIf": [1.75, "Putrid"] },
+      { "Adds": ["Putrid", 1] }
+    ]
+  },
+  "paradisiac_flower": {
+    "multiplier": 19.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 26442,
+    "effects": [
+      { "Adds": ["Perfumed", 1] },
+      { "MultiplyIf": [0.1, "Putrid"] },
+      { "MultiplyIf": [0.0, "Vulnerable"] }
+    ]
+  },
+  "metropunk_clockwork": {
+    "multiplier": 29.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 26915,
+    "effects": [
+      { "Adds": ["Fueled", 3] },
+      { "Adds": ["Aired", 1] },
+      { "AddsVulnerability": "Magnetic" }
+    ]
+  },
+  "moonlight_temple": {
+    "multiplier": 19.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 36812,
+    "effects": [
+      { "Adds": ["Polished", 1] },
+      { "Overtime": [1.5, 12.0] },
+      { "DestroysVulnerability": "Acid" }
+    ]
+  },
+  "abyssal_chains": {
+    "multiplier": 33.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 50200,
+    "effects": [
+      { "Removes": { "Acid": 1 } },
+      { "Removes": { "Fire": 1.0 } },
+      { "Adds": ["Wet", 1] }
+    ]
+  },
+  "draconic_necromancy": {
+    "multiplier": 36.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 68910,
+    "effects": [
+      { "Adds": ["Magnetic", 1] },
+      { "Adds": ["Aired", 1] },
+      { "Adds": [{ "Fire": 4.0 }, 1] },
+      { "Destroys": { "Time": [1, 1.0] } },
+      { "Destroys": "Fueled" }
+    ]
+  },
+  "bloodstruck_ritual": {
+    "multiplier": 40.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 71120,
+    "effects": [
+      { "MultiplyIf": [0.3, { "Time": [1, 1.0] }] },
+      { "MultiplyIfGrouped": [0.6, ["Wet", "Aired"]] },
+      {
+        "MultiplyIfGrouped": [1.2, ["Putrid", { "Acid": 1 }, { "Fire": 1.0 }]]
+      },
+      { "MultiplyIf": [0.8, "Ice"] },
+      { "MultiplyIf": [1.6, "Vulnerable"] }
+    ]
+  },
+  "cursed_siege": {
+    "multiplier": 41.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 91060,
+    "effects": [
+      { "Adds": ["Fueled", 1] },
+      { "MultiplyIf": [2.0, "Aired"] },
+      { "Removes": "Aired" }
+    ]
+  },
+  "electrical_annihilation": {
+    "multiplier": 43.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 126500,
+    "effects": [
+      { "Adds": ["Magnetic", 1] },
+      { "MultiplyIf": [2.5, { "Acid": 1 }] },
+      { "Destroys": { "Fire": 1.0 } }
+    ]
+  },
+  "skeletal_warlock": {
+    "multiplier": 46.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 167900,
+    "effects": [
+      { "MultiplyIf": [2.0, "Magnetic"] },
+      { "Destroys": { "Fire": 1.0 } }
+    ]
+  },
+  "dyson_sphere": {
+    "multiplier": 52.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 251900,
+    "effects": []
+  },
+  "forceful_blizzard": {
+    "multiplier": 30.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 421400,
+    "effects": [
+      { "Replaces": ["Wet", "Ice"] },
+      { "Replaces": [{ "Fire": 1.0 }, "Wet"] }
+    ]
+  },
+  "simulation_error": {
+    "multiplier": 50.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 5050500,
+    "effects": [{ "MultiplyIf": [10.0, "Glitch"] }]
+  },
+  "resonance_synthesia": {
+    "multiplier": 80.0,
+    "multipliers": [],
+    "modifiers": "Standard",
+    "rarity": 7500000,
+    "effects": [
+      { "AddsIf": ["Shield", "Glitch"] },
+      { "MultiplyIf": [0.75, "Putrid"] }
+    ]
+  }
+}

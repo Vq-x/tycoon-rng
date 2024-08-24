@@ -118,6 +118,12 @@ impl Upgrader {
                         multiplier *= num;
                     }
                 }
+
+                UpgraderTypes::MultiplyIfGrouped(num, tags) => {
+                    if tags.iter().any(|tag| ore.tags.contains(tag)) {
+                        multiplier *= num;
+                    }
+                }
                 // extra upgrade logarithmically based on ore value
                 UpgraderTypes::ExtraLogarithmic => {
                     let eq = log_base(ore.value + 1.0, 1000.0) / 4.0;
@@ -128,7 +134,7 @@ impl Upgrader {
                     ore.remove_tag(tag.clone());
                 }
                 UpgraderTypes::Overtime(mult, seconds) => {
-                    ore.add_tag(Tags::Time(*mult as u8, *seconds as u32));
+                    ore.add_tag(Tags::Time(*seconds as u8, *mult));
                 }
                 UpgraderTypes::AddsImmunity(immunity) => {
                     ore.add_immunity(immunity.clone());
@@ -141,6 +147,15 @@ impl Upgrader {
                         .tags
                         .iter()
                         .any(|t| mem::discriminant(t) == mem::discriminant(tag))
+                    {
+                        ore.destroy();
+                    }
+                }
+                UpgraderTypes::DestroysVulnerability(vulnerability) => {
+                    if ore
+                        .vulnerabilities
+                        .iter()
+                        .any(|v| mem::discriminant(v) == mem::discriminant(vulnerability))
                     {
                         ore.destroy();
                     }
