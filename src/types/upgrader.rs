@@ -29,7 +29,6 @@ TODO:
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Upgrader {
     pub multiplier: f32,
-    pub multipliers: Vec<Multipliers>,
     pub modifiers: Modifiers,
     pub rarity: u64,
     pub effects: Vec<UpgraderTypes>,
@@ -217,7 +216,6 @@ impl Default for Upgrader {
     fn default() -> Self {
         Self {
             multiplier: 1.0,
-            multipliers: vec![],
             modifiers: Modifiers::Standard,
             rarity: 1000,
             effects: vec![],
