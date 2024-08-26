@@ -209,10 +209,11 @@ mod tests {
     #[test]
     fn test_upgrader_json() {
         for upgrader in Upgraders::iter() {
-            let upgrader =
+            println!("{:?}", upgrader);
+            let upgrader1 =
                 Upgrader::get_upgrader(upgrader, Modifiers::OverclockedNegativeGolden).unwrap();
-            assert!(upgrader.rarity > 0);
-            assert!(upgrader.multiplier > 0.0);
+            assert!(upgrader1.rarity > 0);
+            assert!(upgrader1.multiplier > 0.0);
         }
     }
 }

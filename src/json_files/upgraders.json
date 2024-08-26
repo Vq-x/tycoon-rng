@@ -99,7 +99,7 @@
     "multiplier": 12.0,
     "modifiers": "Standard",
     "rarity": 1232,
-    "effects": []
+    "effects": [{ "DestroysPercent": 20.0 }]
   },
   "forbidden_breeze": {
     "multiplier": 13.0,
@@ -154,13 +154,16 @@
     "multiplier": 40.0,
     "modifiers": "Standard",
     "rarity": 3660000,
-    "effects": [{ "ExtraForEach": [1.5, "Vulnerable"] }]
+    "effects": [
+      { "ExtraForEach": [1.5, "Vulnerable"] },
+      { "DestroysIfNotPercent": [40.0, "Vulnerable"] }
+    ]
   },
   "heavenly_ruins": {
     "multiplier": 28.0,
     "modifiers": "Standard",
     "rarity": 11432,
-    "effects": []
+    "effects": ["RemovesRandomVulnerability"]
   },
   "steampunk_overdrive": {
     "multiplier": 26.0,
@@ -204,7 +207,8 @@
     "effects": [
       { "Destroys": "Wet" },
       { "MultiplyIf": [1.75, "Putrid"] },
-      { "Adds": ["Putrid", 1] }
+      { "Adds": ["Putrid", 1] },
+      { "DestroysPercent": 15.0 }
     ]
   },
   "paradisiac_flower": {
@@ -224,7 +228,8 @@
     "effects": [
       { "Adds": ["Fueled", 3] },
       { "Adds": ["Aired", 1] },
-      { "AddsVulnerability": "Magnetic" }
+      { "AddsVulnerability": "Magnetic" },
+      { "DestroysPercent": 45.0 }
     ]
   },
   "moonlight_temple": {
@@ -290,7 +295,8 @@
     "effects": [
       { "Adds": ["Magnetic", 1] },
       { "MultiplyIf": [2.5, { "Acid": 1 }] },
-      { "Destroys": { "Fire": 1.0 } }
+      { "Destroys": { "Fire": 1.0 } },
+      { "DestroysPercent": 20.0 }
     ]
   },
   "skeletal_warlock": {
@@ -299,14 +305,21 @@
     "rarity": 167900,
     "effects": [
       { "MultiplyIf": [2.0, "Magnetic"] },
-      { "Destroys": { "Fire": 1.0 } }
+      { "Destroys": { "Fire": 1.0 } },
+      { "DestroysPercent": 30.0 }
     ]
   },
   "dyson_sphere": {
     "multiplier": 52.0,
     "modifiers": "Standard",
     "rarity": 251900,
-    "effects": []
+    "effects": [
+      { "AddsPercent": [60.0, "Fueled", 2] },
+      { "AddsPercent": [40.0, { "Acid": 3 }, 1] },
+      { "DestroysPercent": 20.0 },
+      { "MultipliesPercent": [10.0, 10.0] },
+      { "MultipliesPercent": [1.0, 100.0] }
+    ]
   },
   "forceful_blizzard": {
     "multiplier": 30.0,
