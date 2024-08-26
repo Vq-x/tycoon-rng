@@ -1,9 +1,9 @@
-use std::{any::Any, vec};
-
 use super::{
     enums::{Immunities, Multipliers, Tags, Vulnerabilities},
     upgrader::Upgrader,
 };
+use crate::utils::mix_vectors_evenly;
+use std::{any::Any, vec};
 /*
     TODO:
         - add a struct for ores in a vector
@@ -82,6 +82,10 @@ impl Ore {
         self.multipliers.push(multiplier);
     }
 
+    pub fn remove_vulnerability(&mut self, vulnerability: Vulnerabilities) {
+        self.vulnerabilities.retain(|x| x != &vulnerability);
+    }
+
     pub fn destroy(&mut self) {
         self.destroyed = true;
     }
@@ -96,8 +100,10 @@ impl Ores {
         self.ores.iter_mut().for_each(|ore| upgrader.upgrade(ore));
     }
     pub fn combine(&mut self, other: &mut Ores) {
-        self.ores.append(&mut other.ores);
+        let combined = mix_vectors_evenly(&mut self.ores.clone(), other.ores.clone());
+        self.ores = combined;
     }
+
     pub fn add(&mut self, other: Ore) {
         self.ores.push(other);
     }

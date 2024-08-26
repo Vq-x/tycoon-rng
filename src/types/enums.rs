@@ -158,11 +158,26 @@ pub enum UpgraderTypes {
     //Adds Vulnerability
     AddsVulnerability(Vulnerabilities),
 
+    //Removes Random Vulnerability
+    RemovesRandomVulnerability,
+
+    //Percentage chance to destroy ores
+    DestroysPercent(f64),
+
+    //Percentage to add tag then amount of tags.
+    AddsPercent(f64, Tags, u32),
+
+    //Percentage chance to multiply ores
+    MultipliesPercent(f64, f64),
+
     //destroys ore if tag
     Destroys(Tags),
 
     //destroys ore if vulnerability
     DestroysVulnerability(Vulnerabilities),
+
+    //destroys ore if not tag
+    DestroysIfNotPercent(f64, Tags),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

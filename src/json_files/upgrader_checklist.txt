@@ -62,7 +62,7 @@ Cold Snap — 1 in 10,500 X
 	Adds Ice if Wet
 	2.0x if Aired
 
-Entity Zero — 1 in 1,232 TODO: add percentage chance to destroy ores!
+Entity Zero — 1 in 1,232 X
 	Multiplies ores by 12x
 	20% chance to destroy ores
 
@@ -97,12 +97,12 @@ Data Encryption — 1 in 9,825 X
 	Extra upgrade based on ore value
 	2x Magnetic
 
-Ore Hacker — 1 in 3,660,000 TODO: add percentage chance to destroy ores!
+Ore Hacker — 1 in 3,660,000 X
 	Multiplies ores by 40x
 	40% chance of destroying ores if they're not Vulnerable
 	1.5x for each Vulnerable tag
 
-Heavenly Ruins — 1 in 11,432 TODO: add removing a random Vulnerable!
+Heavenly Ruins — 1 in 11,432 X
 	Multiplies ores by 28x
 	Removes a random Vulnerable
 
@@ -125,7 +125,7 @@ Storm Surge — 1 in 22,190 X
 	Adds Magnetic
 	Removes Acid
 
-Slime Refinery — 1 in 23,921 TODO: add destroying percentage of ores!
+Slime Refinery — 1 in 23,921 X
 	Multiplies ores by ?x
 	Destroys Wet ores
 	Extra 1.5x if Putrid
@@ -138,7 +138,7 @@ Paradisiac Flower — 1 in 26,442 X
 	0.1x multiplier if the ore has Putrid
 	but 0x if the ore is Vulnerable
 
-Metropunk Clockwork — 1 in 26,915 TODO: adds chance to destroy ores!
+Metropunk Clockwork — 1 in 26,915 X
 	Multiplies ores by 29x
 	Adds Fueled (3)
 	Adds Aired
@@ -179,18 +179,18 @@ Cursed Siege — 1 in 91,060 X
 	2x multiplier on Aired ores
 	Removes Aired
 
-Electrical Annihilation — 1 in 126,500 TODO: add percentage chance to destroy ores!
+Electrical Annihilation — 1 in 126,500 X
 	Multiplies ores by 43x
 	Adds Magnetic
 	2.5x multiplier on Acid ores
 	Destroys ores on Fire or 20% randomly
 	
-Skeletal Warlock — 1 in 167,900 TODO: add percentage chance to destroy ores!
+Skeletal Warlock — 1 in 167,900 X
 	Multiplies ores by 46x
 	2x multiplier on Magnetic ores
 	Destroys ores on Fire or 30% randomly
 
-Dyson Sphere — 1 in 251,900 TODO: add percentage chance to destroy ores!
+Dyson Sphere — 1 in 251,900 X
 	Multiplies ores by 52x
 	And a chance to add these effects:
 	60%: Adds Fueled (2)

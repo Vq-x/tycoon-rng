@@ -1,9 +1,9 @@
-use std::{collections::HashMap, mem};
-
+use rand::seq::SliceRandom;
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, Error};
+use std::{collections::HashMap, mem};
 
-use crate::json_files::file::get_json_text;
+use crate::{json_files::file::get_json_text, utils::apply_with_chance};
 
 use super::{
     enums::{
@@ -48,7 +48,7 @@ impl Upgrader {
             get_json_text("src/json_files/upgraders.json").expect("could not find file");
 
         // Deserialize the file into a HashMap<String, Upgrader>
-        let json_map: HashMap<String, Upgrader> = from_str(&file_text)?;
+        let json_map: HashMap<String, Upgrader> = from_str(&file_text).expect("problem with json");
 
         // Convert the enum variant to a string
         let key = upgrader_name.get_string();
@@ -101,6 +101,16 @@ impl Upgrader {
                         ore.add_tag(tag.clone());
                     }
                 }
+                UpgraderTypes::AddsPercent(percent, tag, amount) => {
+                    // for _ in 0..*amount {
+                    //     apply_with_chance(ore, *percent, |ore| ore.add_tag(tag.clone()));
+                    // }
+                    if apply_with_chance(ore, *percent, |_| {}) {
+                        for _ in 0..*amount {
+                            ore.add_tag(tag.clone());
+                        }
+                    }
+                }
                 // Adds Wet If not on Fire
                 UpgraderTypes::AddsIfNot(adds, not_tag) => {
                     if !ore
@@ -141,6 +151,9 @@ impl Upgrader {
                     }
                 }
 
+                UpgraderTypes::MultipliesPercent(percent, num) => {
+                    apply_with_chance(ore, *percent, |_| multiplier *= *num as f32);
+                }
                 UpgraderTypes::MultiplyIfGrouped(num, tags) => {
                     if tags.iter().any(|tag| ore.tags.contains(tag)) {
                         multiplier *= num;
@@ -164,6 +177,13 @@ impl Upgrader {
                 UpgraderTypes::AddsVulnerability(vulnerability) => {
                     ore.add_vulnerability(vulnerability.clone());
                 }
+                UpgraderTypes::RemovesRandomVulnerability => {
+                    if let Some(vulnerability) =
+                        ore.vulnerabilities.choose(&mut rand::thread_rng()).cloned()
+                    {
+                        ore.remove_vulnerability(vulnerability);
+                    }
+                }
                 UpgraderTypes::Destroys(tag) => {
                     if ore
                         .tags
@@ -172,6 +192,18 @@ impl Upgrader {
                     {
                         ore.destroy();
                     }
+                }
+                UpgraderTypes::DestroysIfNotPercent(percent, tag) => {
+                    if !ore
+                        .tags
+                        .iter()
+                        .any(|t: &Tags| mem::discriminant(t) == mem::discriminant(tag))
+                    {
+                        apply_with_chance(ore, *percent, |ore| ore.destroy());
+                    }
+                }
+                UpgraderTypes::DestroysPercent(percent) => {
+                    apply_with_chance(ore, *percent, |ore| ore.destroy());
                 }
                 UpgraderTypes::DestroysVulnerability(vulnerability) => {
                     if ore
