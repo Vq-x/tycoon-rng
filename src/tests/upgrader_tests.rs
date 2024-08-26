@@ -6,7 +6,8 @@ mod tests {
 
     use crate::types::{
         enums::{
-            Immunities, Modifiers, Multipliers, Tags, UpgraderTypes, Upgraders, Vulnerabilities,
+            Immunities, MineTypes, Modifiers, Multipliers, Tags, UpgraderTypes, Upgraders,
+            Vulnerabilities,
         },
         mine::Mine,
         upgrader::Upgrader,
@@ -19,9 +20,12 @@ mod tests {
             value: 38.0,
             rarity: 12_600,
             modifiers: Modifiers::Golden,
-            adds: vec![Multipliers::Acid(2.0), Multipliers::Putrid(1.0)],
-            adds_vulnerabilities: vec![Vulnerabilities::Fire],
-            adds_immunities: vec![Immunities::Acid],
+            effects: vec![
+                MineTypes::Multiplier(Multipliers::Acid(2.0)),
+                MineTypes::Multiplier(Multipliers::Putrid(1.0)),
+                MineTypes::Vulnerability(Vulnerabilities::Fire),
+                MineTypes::Immunity(Immunities::Acid),
+            ],
         };
         let mut ore = corrosive_sentinel.spawn_ore();
         let steam_engine = Upgrader {
@@ -57,9 +61,12 @@ mod tests {
             value: 38.0,
             rarity: 12_600,
             modifiers: Modifiers::Golden,
-            adds: vec![Multipliers::Acid(2.0), Multipliers::Putrid(1.0)],
-            adds_vulnerabilities: vec![Vulnerabilities::Fire],
-            adds_immunities: vec![Immunities::Acid],
+            effects: vec![
+                MineTypes::Multiplier(Multipliers::Acid(2.0)),
+                MineTypes::Multiplier(Multipliers::Putrid(1.0)),
+                MineTypes::Vulnerability(Vulnerabilities::Fire),
+                MineTypes::Immunity(Immunities::Acid),
+            ],
         };
         let mut ore = corrosive_sentinel.spawn_ore();
         let data_encryption = Upgrader {
@@ -84,7 +91,7 @@ mod tests {
             value: 647.5,
             rarity: 656_000,
             modifiers: Modifiers::Golden,
-            adds: vec![Multipliers::Vulnerable(2.2)],
+            effects: vec![MineTypes::Multiplier(Multipliers::Vulnerable(2.2))],
             ..Default::default()
         };
         let mut ore = shadow_veil.spawn_ore();

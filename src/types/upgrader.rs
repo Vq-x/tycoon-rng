@@ -63,6 +63,10 @@ impl Upgrader {
         Ok(upgrader)
     }
     pub fn upgrade(&self, ore: &mut Ore) {
+        // if ore is destroyed, return
+        if ore.destroyed {
+            return;
+        };
         // multiply ore by multiplier
         let mut multiplier = self.multiplier;
 

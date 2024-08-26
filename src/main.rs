@@ -6,8 +6,8 @@ use serde_json::{from_str, to_string, to_string_pretty};
 use std::{borrow::BorrowMut, vec};
 use types::{
     enums::{
-        FurnaceTypes, Immunities, Modifiers, Multipliers, Tags, UpgraderTypes, Upgraders,
-        Vulnerabilities,
+        FurnaceTypes, Immunities, MineTypes, Modifiers, Multipliers, Tags, UpgraderTypes,
+        Upgraders, Vulnerabilities,
     },
     furnace::Furnace,
     mine::Mine,
@@ -18,114 +18,48 @@ use types::{
 use utils::human_readable;
 
 fn main() {
-    let mut digital_anomaly = Mine {
+    let mine = Mine {
         drop_rate: 1.0,
-        value: 400.0,
-        rarity: 2_500_000,
-        modifiers: Modifiers::Standard,
-        ..Default::default()
-    };
-    let mut gut_dripper = Mine {
-        drop_rate: 2.2,
-        value: 510.0,
-        rarity: 11_500_000,
-        modifiers: Modifiers::Negative,
-        adds: vec![Multipliers::Wet(2.0)],
-        adds_vulnerabilities: vec![Vulnerabilities::Acid],
-        ..Default::default()
-    };
-
-    let surge_dropper = Mine {
-        drop_rate: 2.0,
-        value: 6.5,
-        modifiers: Modifiers::Standard,
-        adds: vec![Multipliers::Wet(1.8)],
-        ..Default::default()
-    };
-    let cursed_siege = Upgrader {
-        multiplier: 300.6,
-        modifiers: Modifiers::OverclockedGolden,
-        rarity: 22_700_000,
-        effects: vec![
-            UpgraderTypes::Adds(Tags::Fueled, 1),
-            UpgraderTypes::MultiplyIf(2.0, Tags::Aired),
-            UpgraderTypes::Removes(Tags::Aired),
-        ],
-        ..Default::default()
-    };
-    let aurora_tundra = Upgrader {
-        multiplier: 342.5,
-        effects: vec![
-            UpgraderTypes::ExtraForEach(1.2, Tags::Fire(1.0)),
-            UpgraderTypes::Removes(Tags::Fire(1.0)),
-        ],
-        modifiers: Modifiers::NegativeGolden,
-        ..Default::default()
-    };
-
-    let wind_tunnel = Upgrader {
-        multiplier: 98.5,
-        modifiers: Modifiers::Negative,
-        ..Default::default()
-    };
-
-    let mut perfect_lawn_negative = Upgrader {
-        multiplier: 143.5,
-        effects: vec![UpgraderTypes::AddsIfThen(Tags::Wet, 1, Tags::Fire(1.0), 2)],
-        modifiers: Modifiers::Negative,
-        ..Default::default()
-    };
-
-    let mut perfect_lawn_og = perfect_lawn_negative.clone();
-    perfect_lawn_og.modify(Modifiers::OverclockedGolden);
-
-    let mut hand_of_poseidon = Furnace {
-        multiplier: 67.5,
+        value: 647.5,
+        rarity: 656_000,
         modifiers: Modifiers::Golden,
-        rarity: 9_990_000,
-        effects: vec![FurnaceTypes::MultipliesByTag(Tags::Wet, 1.0)],
+        effects: vec![MineTypes::Multiplier(Multipliers::Vulnerable(2.2))],
+        ..Default::default()
     };
-
-    let mut wind_turbine = Mine {
-        drop_rate: 1.9,
-        value: 315.0,
-        rarity: 3_430_000,
-        modifiers: Modifiers::NegativeGolden,
-        adds: vec![Multipliers::Aired(2.0)],
-        adds_vulnerabilities: vec![Vulnerabilities::Wet],
-        adds_immunities: vec![Immunities::Fire],
+    let mut ores = mine.spawn_ores(100);
+    let mine2 = Mine {
+        drop_rate: 5.0,
+        value: 100.0,
+        rarity: 100_000,
+        modifiers: Modifiers::Golden,
+        effects: vec![
+            MineTypes::Multiplier(Multipliers::Vulnerable(2.2)),
+            MineTypes::Vulnerability(Vulnerabilities::Fire),
+            MineTypes::Vulnerability(Vulnerabilities::Acid),
+        ],
+        ..Default::default()
     };
+    // ores.combine(&mut mine2.spawn_ores(100));
+    let mut upgrader = Upgrader {
+        multiplier: 40.0,
+        modifiers: Modifiers::Standard,
+        rarity: 3660000,
+        effects: vec![UpgraderTypes::Adds(Tags::Vulnerable, 1)],
+    };
+    // ores.upgrade(&upgrader);
+    let upgrader2 = Upgrader::get_upgrader(Upgraders::OreHacker, Modifiers::Standard).unwrap();
+    println!("{:?}", upgrader2);
+    println!("{:?}", human_readable(upgrader2.rarity));
+    // upgrader.modify(Modifiers::Standard);
+    println!("{}", to_string(&upgrader).unwrap());
 
-    // let mut ores = gut_dripper.spawn_ores(50);
-    /*
-    TODO:
-        - make sure the ores that have a 2x multiplier for wet tag
-          get applied when those ores go through a upgrader that adds wet.
-
-     */
-    let mut ores = Ores { ores: vec![] };
-    gut_dripper.modify(Modifiers::OverclockedGolden);
-    ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
-    gut_dripper.modify(Modifiers::Negative);
-    ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
-    gut_dripper.modify(Modifiers::Golden);
-    ores.combine(gut_dripper.spawn_ores(10).borrow_mut());
-    ores.combine(wind_turbine.spawn_ores(10).borrow_mut());
-    ores.upgrade(&cursed_siege);
-    ores.upgrade(&perfect_lawn_negative);
-    ores.upgrade(&perfect_lawn_negative);
-    ores.upgrade(&perfect_lawn_negative);
-    println!("ores amount: {:?}", ores.ores.len());
+    println!("total ores count: {:?}", ores.ores.len());
+    println!("{:?}", ores.ores.iter().filter(|ore| ore.destroyed).count());
+    ores.upgrade(&upgrader2);
     println!(
-        "destroyed: {:?}",
-        ores.ores.iter().filter(|o| o.destroyed).count()
+        "percent ores destroyed:{:?}",
+        ores.ores.iter().filter(|ore| ore.destroyed).count() as f32 / ores.ores.len() as f32
+            * 100.0
     );
-    println!(
-        "regular: {:?}",
-        human_readable(hand_of_poseidon.process_ores(&mut ores) / 10.0)
-    );
-    println!(
-        "human readable: {:?}",
-        human_readable(hand_of_poseidon.process_ores(&mut ores) / 10.0 * 0.69)
-    );
+    // println!("ores: {:?}", ores.ores);
 }

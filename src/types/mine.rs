@@ -1,7 +1,7 @@
 use super::{
     enums::{
-        Immunities, Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES,
-        RARITY_MULTIPLIERS,
+        Immunities, MineTypes, Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES,
+        MINE_RATES, RARITY_MULTIPLIERS,
     },
     ore::{Ore, Ores},
     utils::Modify,
@@ -11,9 +11,7 @@ use super::{
 pub struct Mine {
     pub drop_rate: f32,
     pub value: f64,
-    pub adds: Vec<Multipliers>,
-    pub adds_vulnerabilities: Vec<Vulnerabilities>,
-    pub adds_immunities: Vec<Immunities>,
+    pub effects: Vec<MineTypes>,
     pub modifiers: Modifiers,
     pub rarity: u64,
 }
@@ -23,9 +21,7 @@ impl Default for Mine {
         Self {
             drop_rate: 1.0,
             value: 1.0,
-            adds: vec![],
-            adds_vulnerabilities: vec![],
-            adds_immunities: vec![],
+            effects: vec![],
             modifiers: Modifiers::Standard,
             rarity: 1000,
         }
@@ -54,10 +50,29 @@ impl Mine {
 
     pub fn spawn_ore(&self) -> Ore {
         let value = self.value;
-        let multipliers = &self.adds;
-        let immunities = &self.adds_immunities;
-        let vulnerabilities = &self.adds_vulnerabilities;
-
+        // let multipliers = &self.adds;
+        // let immunities = &self.adds_immunities;
+        // let vulnerabilities = &self.adds_vulnerabilities;
+        let mut multipliers = Vec::new();
+        let mut tags = Vec::new();
+        let mut immunities = Vec::new();
+        let mut vulnerabilities = Vec::new();
+        for effect in self.effects.iter() {
+            match effect {
+                MineTypes::Tag(tag) => {
+                    tags.push(tag.clone());
+                }
+                MineTypes::Multiplier(mult) => {
+                    multipliers.push(mult.clone());
+                }
+                MineTypes::Immunity(immunity) => {
+                    immunities.push(immunity.clone());
+                }
+                MineTypes::Vulnerability(vulnerability) => {
+                    vulnerabilities.push(vulnerability.clone());
+                }
+            }
+        }
         // Ore::new(
         //     value,
         //     Some(multipliers.clone()),
@@ -68,9 +83,10 @@ impl Mine {
 
         Ore {
             value,
-            multipliers: multipliers.clone(),
-            immunities: immunities.clone(),
-            vulnerabilities: vulnerabilities.clone(),
+            tags,
+            multipliers,
+            immunities,
+            vulnerabilities,
             ..Default::default()
         }
     }
@@ -78,8 +94,7 @@ impl Mine {
     pub fn spawn_ores(&self, seconds: u16) -> Ores {
         let amount = (seconds as f32 * self.drop_rate).floor();
         let group: Vec<Ore> = (0..amount as u16).map(|_| self.spawn_ore()).collect();
-        let ores = Ores { ores: group };
-        ores
+        Ores { ores: group }
     }
 }
 

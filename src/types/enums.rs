@@ -72,7 +72,7 @@ pub enum Vulnerabilities {
     Time,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Multipliers {
     Fire(f32),
     Polished(f32),
@@ -115,6 +115,21 @@ pub enum Modifiers {
     OverclockedNegative,
     NegativeGolden,
     OverclockedNegativeGolden,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum MineTypes {
+    // adds tag
+    Tag(Tags),
+
+    // adds multiplier
+    Multiplier(Multipliers),
+
+    // adds immunity
+    Immunity(Immunities),
+
+    // adds vulnerability
+    Vulnerability(Vulnerabilities),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
