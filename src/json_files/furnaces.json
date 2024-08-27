@@ -1,0 +1,155 @@
+{
+  "basic_processor": {
+    "multiplier": 1.0,
+    "modifiers": "Standard",
+    "rarity": 1,
+    "effects": [{ "ExtraMultiplierIfMoreThanAmount": [1.1, 1] }]
+  },
+  "lilac_processor": {
+    "multiplier": 2.0,
+    "modifiers": "Standard",
+    "rarity": 22,
+    "effects": [{ "ExtraMultiplierEvery": 0.1 }]
+  },
+  "express_post": {
+    "multiplier": 3.0,
+    "modifiers": "Standard",
+    "rarity": 76,
+    "effects": [{ "MultiplyIf": [1.5, { "Fire": 1.0 }] }]
+  },
+  "twisting_turbulence": {
+    "multiplier": 4.2,
+    "modifiers": "Standard",
+    "rarity": 420,
+    "effects": [{ "MultiplyIf": [1.5, "Aired"] }]
+  },
+  "mystic_forge": {
+    "multiplier": 4.0,
+    "modifiers": "Standard",
+    "rarity": 132,
+    "effects": [{ "MultiplyIf": [1.5, "Wet"] }]
+  },
+  "celestial_incinerator": {
+    "multiplier": 5.0,
+    "modifiers": "Standard",
+    "rarity": 238,
+    "effects": [{ "MultiplyIf": [2.0, "Magnetic"] }]
+  },
+  "vortex_melter": {
+    "multiplier": 5.5,
+    "modifiers": "Standard",
+    "rarity": 378,
+    "effects": [{ "MultiplyIf": [1.6, "Aired"] }]
+  },
+  "void_shrine": {
+    "multiplier": 6.0,
+    "modifiers": "Standard",
+    "rarity": 570,
+    "effects": [
+      { "MultiplyIf": [1.5, { "Fire": 1.0 }] },
+      { "MultiplyIf": [1.5, { "Acid": 1 }] }
+    ]
+  },
+  "daydream_reverie": {
+    "multiplier": 8.0,
+    "modifiers": "Standard",
+    "rarity": 786,
+    "effects": [{ "MultiplyIf": [1.5, "Wet"] }, { "Refuses": { "Fire": 1.0 } }]
+  },
+  "starlight_transformer": {
+    "multiplier": 12.4,
+    "modifiers": "Standard",
+    "rarity": 1582,
+    "effects": [{ "MultiplyIf": [0.5, "Putrid"] }]
+  },
+  "idyllic_flower": {
+    "multiplier": 7.25,
+    "modifiers": "Standard",
+    "rarity": 3489,
+    "effects": [
+      { "MultipliesByTag": ["Perfumed", 0.0] },
+      { "ExtraMultiplierIfUpgradedBy": [5.0, "ParadisiacFlower"] }
+    ]
+  },
+  "divine_jury": {
+    "multiplier": 16.0,
+    "modifiers": "Standard",
+    "rarity": 5380,
+    "effects": [{ "MultiplyIf": [1.6, "Putrid"] }]
+  },
+  "track_of_evolution": {
+    "multiplier": 33.1,
+    "modifiers": "Standard",
+    "rarity": 5789,
+    "effects": [{ "MultiplyIf": [1.35, "Fueled"] }]
+  },
+  "snowpond_touch": {
+    "multiplier": 13.0,
+    "modifiers": "Standard",
+    "rarity": 144655,
+    "effects": [{ "MultiplyIf": [2.0, "Ice"] }, { "Refuses": { "Fire": 1.0 } }]
+  },
+  "blox_portal": {
+    "multiplier": 17.0,
+    "modifiers": "Standard",
+    "rarity": 88888,
+    "effects": [
+      { "MultiplyIf": [2.0, "Polished"] },
+      { "MultiplyIf": [2.0, "Magnetic"] },
+      { "Refuses": "Wet" }
+    ]
+  },
+  "the_mothman": {
+    "multiplier": 23.0,
+    "modifiers": "Standard",
+    "rarity": 18683,
+    "effects": [
+      { "MultiplyIf": [2.0, { "Acid": 1 }] },
+      { "OnlyAccepts": "Putrid" }
+    ]
+  },
+  "tidal_temple": {
+    "multiplier": 21.0,
+    "modifiers": "Standard",
+    "rarity": 18100,
+    "effects": [{ "MultiplyIf": [2.2, "Wet"] }]
+  },
+  "oil_distillery": {
+    "multiplier": 28.0,
+    "modifiers": "Standard",
+    "rarity": 36251,
+    "effects": [
+      { "MultiplyIf": [2.2, { "Acid": 1 }] },
+      { "Refuses": { "Fire": 1.0 } }
+    ]
+  },
+  "hand_of_poseidon": {
+    "multiplier": 20.0,
+    "modifiers": "Standard",
+    "rarity": 399996,
+    "effects": [
+      { "Refuses": { "Fire": 1.0 } },
+      { "Refuses": { "Acid": 1 } },
+      { "MultipliesByTag": ["Wet", 1.0] }
+    ]
+  },
+  "cyber_apocalypse": {
+    "multiplier": 28.0,
+    "modifiers": "Standard",
+    "rarity": 3800050,
+    "effects": [
+      { "ExtraMultiplierEvery": 0.5 },
+      { "ChanceForEach": [0.2, "Glitch", 6] }
+    ]
+  },
+  "signal_transmitter": {
+    "multiplier": 47.0,
+    "modifiers": "Standard",
+    "rarity": 101100,
+    "effects": [
+      { "MultiplyIf": [1.6, "Magnetic"] },
+      { "MultiplyIf": [1.6, { "Fire": 1.0 }] },
+      { "MultiplyIf": [0.2, "Fueled"] }
+    ]
+  }
+}

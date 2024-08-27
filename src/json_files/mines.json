@@ -1,0 +1,194 @@
+{
+  "iron_mine": {
+    "drop_rate": 1.0,
+    "value": 1.0,
+    "effects": [{ "Multiplier": { "Magnetic": 1.3 } }],
+    "modifiers": "Standard",
+    "rarity": 3
+  },
+  "copper_mine": {
+    "drop_rate": 0.8,
+    "value": 3.0,
+    "effects": [{ "Vulnerability": "Air" }],
+    "modifiers": "Standard",
+    "rarity": 22
+  },
+  "silver_mine": {
+    "drop_rate": 1.4,
+    "value": 4.0,
+    "effects": [{ "Vulnerability": "Acid" }],
+    "modifiers": "Standard",
+    "rarity": 38
+  },
+  "heated_dropper": {
+    "drop_rate": 1.2,
+    "value": 8.0,
+    "effects": [{ "Immunity": "Fire" }],
+    "modifiers": "Standard",
+    "rarity": 62
+  },
+  "surge_dropper": {
+    "drop_rate": 2.0,
+    "value": 6.5,
+    "effects": [{ "Multiplier": { "Wet": 1.8 } }],
+    "modifiers": "Standard",
+    "rarity": 94
+  },
+  "contamination": {
+    "drop_rate": 0.2,
+    "value": 80.0,
+    "effects": [{ "Vulnerability": "Time" }],
+    "modifiers": "Standard",
+    "rarity": 158
+  },
+  "natures_embrace": {
+    "drop_rate": 1.2,
+    "value": 23.0,
+    "effects": [{ "Vulnerability": "Fire" }, { "Multiplier": { "Wet": 1.6 } }],
+    "modifiers": "Standard",
+    "rarity": 330
+  },
+  "wind_turbine": {
+    "drop_rate": 1.9,
+    "value": 12.0,
+    "effects": [
+      { "Vulnerability": "Wet" },
+      { "Multiplier": { "Aired": 2.0 } },
+      { "Immunity": "Fire" }
+    ],
+    "modifiers": "Standard",
+    "rarity": 550
+  },
+  "arcane_rune": {
+    "drop_rate": 1.4,
+    "value": 25.0,
+    "effects": [{ "Vulnerability": "Magnetic" }],
+    "modifiers": "Standard",
+    "rarity": 710
+  },
+  "radiant_star": {
+    "drop_rate": 1.2,
+    "value": 36.0,
+    "effects": [{ "Multiplier": { "Magnetic": 2.0 } }],
+    "modifiers": "Standard",
+    "rarity": 978
+  },
+  "celestial_light": {
+    "drop_rate": 0.9,
+    "value": 42.0,
+    "effects": [{ "Multiplier": { "Fire": 1.6 } }],
+    "modifiers": "Standard",
+    "rarity": 1100
+  },
+  "the_icicle": {
+    "drop_rate": 1.4,
+    "value": 68.0,
+    "effects": [{ "Vulnerability": "Fire" }, { "Multiplier": { "Wet": 1.6 } }],
+    "modifiers": "Standard",
+    "rarity": 2880
+  },
+  "crystal_mist": {
+    "drop_rate": 1.2,
+    "value": 75.0,
+    "effects": [{ "Multiplier": { "Polished": 2.0 } }],
+    "modifiers": "Standard",
+    "rarity": 4200
+  },
+  "stellar_occultation": {
+    "drop_rate": 5.0,
+    "value": 21.0,
+    "effects": [
+      { "Vulnerability": "Time" },
+      { "Multiplier": { "Magnetic": 1.6 } }
+    ],
+    "modifiers": "Standard",
+    "rarity": 5420
+  },
+  "royal_castlekeep": {
+    "drop_rate": 0.1,
+    "value": 1000.0,
+    "effects": [
+      { "Vulnerability": "Wet" },
+      { "Vulnerability": "Aired" },
+      { "Multiplier": { "Fire": 2.0 } },
+      { "Immunity": "Fire" }
+    ],
+    "modifiers": "Standard",
+    "rarity": 8423
+  },
+  "digital_world": {
+    "drop_rate": 3.0,
+    "value": 37.0,
+    "effects": [{ "Multiplier": { "Time": 1.9 } }],
+    "modifiers": "Standard",
+    "rarity": 9622
+  },
+  "corrosive_sentinel": {
+    "drop_rate": 4.0,
+    "value": 38.0,
+    "effects": [
+      { "Vulnerability": "Fire" },
+      { "Multiplier": { "Putrid": 1.2 } },
+      { "Multiplier": { "Acid": 2.2 } },
+      { "Immunity": "Acid" }
+    ],
+    "modifiers": "Standard",
+    "rarity": 12620
+  },
+  "floral_obliterator": {
+    "drop_rate": 0.5,
+    "value": 275.0,
+    "effects": [{ "Multiplier": { "Aired": 1.6 } }],
+    "modifiers": "Standard",
+    "rarity": 15782
+  },
+  "timekeepers_clocktower": {
+    "drop_rate": 1.0,
+    "value": 212.0,
+    "effects": [{ "Multiplier": { "Time": 3.0 } }],
+    "modifiers": "Standard",
+    "rarity": 17420
+  },
+  "shadow_veil": {
+    "drop_rate": 0.9,
+    "value": 185.0,
+    "effects": [{ "Multiplier": { "Vulnerable": 2.2 } }],
+    "modifiers": "Standard",
+    "rarity": 26240
+  },
+  "guttation_dripper": {
+    "drop_rate": 2.2,
+    "value": 68.0,
+    "effects": [{ "Vulnerability": "Acid" }, { "Multiplier": { "Wet": 2.0 } }],
+    "modifiers": "Standard",
+    "rarity": 46380
+  },
+  "galvanic_surge": {
+    "drop_rate": 0.7,
+    "value": 1234.0,
+    "effects": [{ "Vulnerability": "Wet" }, { "Tag": ["Fueled", 1] }],
+    "modifiers": "Standard",
+    "rarity": 263362
+  },
+  "utopic_flower": {
+    "drop_rate": 1.1,
+    "value": 1117.0,
+    "effects": [
+      { "Vulnerability": "Fire" },
+      { "Vulnerability": "Acid" },
+      { "Vulnerability": "Putrid" },
+      { "Vulnerability": "Magnetic" },
+      { "Multiplier": { "Vulnerable": 0.0 } },
+      { "Multiplier": { "Perfumed": 3.6 } }
+    ],
+    "modifiers": "Standard",
+    "rarity": 312400
+  },
+  "glitchkings_domain": {
+    "drop_rate": 2.3,
+    "value": 75.0,
+    "effects": [{ "Tag": ["Glitch", 1] }],
+    "modifiers": "Standard",
+    "rarity": 6617000
+  }
+}

@@ -70,9 +70,10 @@ pub enum Vulnerabilities {
     Magnetic,
     Air,
     Time,
+    Aired,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Multipliers {
     Fire(f32),
     Polished(f32),
@@ -115,6 +116,21 @@ pub enum Modifiers {
     OverclockedNegative,
     NegativeGolden,
     OverclockedNegativeGolden,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum MineTypes {
+    // adds tag
+    Tag(Tags, u32),
+
+    // adds multiplier
+    Multiplier(Multipliers),
+
+    // adds immunity
+    Immunity(Immunities),
+
+    // adds vulnerability
+    Vulnerability(Vulnerabilities),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -191,16 +207,26 @@ pub enum FurnaceTypes {
     // Extra Multiplier for every Tag: 0.1x
     ExtraMultiplierEvery(f32),
 
+    //Extra 5x if the ore was previously upgraded by Paradisiac Flower
+    ExtraMultiplierIfUpgradedBy(f32, Upgraders),
+
+    // Extra Multiplier if more than 1 Tag on ore: 1.1x
+    ExtraMultiplierIfMoreThanAmount(f32, u32),
+
     //Multiplies ores based on how many wet tags they have, if there are no wet tags then it will be processed at 1
     MultipliesByTag(Tags, f32),
 
     // +/- 0.2x value for each Glitch (tag) (up to 6)
+    ChanceForEach(f32, Tags, u8),
 
     // +0.5x for each tag
     AddForEach(f32, Tags),
+
+    // Only Accepts Putrid ores
+    OnlyAccepts(Tags),
 }
 
-#[derive(Debug, Deserialize, EnumIter)]
+#[derive(Debug, Deserialize, Serialize, Clone, EnumIter)]
 pub enum Upgraders {
     OreSoaker,
     OrePolisher,
@@ -292,6 +318,116 @@ impl Upgraders {
             Upgraders::ForcefulBlizzard => "forceful_blizzard".to_string(),
             Upgraders::SimulationError => "simulation_error".to_string(),
             Upgraders::ResonanceSynthesia => "resonance_synthesia".to_string(),
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, EnumIter)]
+pub enum Mines {
+    IronMine,
+    CopperMine,
+    SilverMine,
+    HeatedDropper,
+    SurgeDropper,
+    Contamination,
+    NaturesEmbrace,
+    WindTurbine,
+    ArcaneRune,
+    RadiantStar,
+    CelestialLight,
+    TheIcicle,
+    CrystalMist,
+    StellarOccultation,
+    RoyalCastlekeep,
+    DigitalWorld,
+    CorrosiveSentinel,
+    FloralObliterator,
+    TimekeepersClocktower,
+    ShadowVeil,
+    GuttationDripper,
+    GalvanicSurge,
+    UtopicFlower,
+    GlitchkingsDomain,
+}
+impl Mines {
+    pub fn get_string(&self) -> String {
+        match self {
+            Mines::IronMine => "iron_mine".to_string(),
+            Mines::CopperMine => "copper_mine".to_string(),
+            Mines::SilverMine => "silver_mine".to_string(),
+            Mines::HeatedDropper => "heated_dropper".to_string(),
+            Mines::SurgeDropper => "surge_dropper".to_string(),
+            Mines::Contamination => "contamination".to_string(),
+            Mines::NaturesEmbrace => "natures_embrace".to_string(),
+            Mines::WindTurbine => "wind_turbine".to_string(),
+            Mines::ArcaneRune => "arcane_rune".to_string(),
+            Mines::RadiantStar => "radiant_star".to_string(),
+            Mines::CelestialLight => "celestial_light".to_string(),
+            Mines::TheIcicle => "the_icicle".to_string(),
+            Mines::CrystalMist => "crystal_mist".to_string(),
+            Mines::StellarOccultation => "stellar_occultation".to_string(),
+            Mines::RoyalCastlekeep => "royal_castlekeep".to_string(),
+            Mines::DigitalWorld => "digital_world".to_string(),
+            Mines::CorrosiveSentinel => "corrosive_sentinel".to_string(),
+            Mines::FloralObliterator => "floral_obliterator".to_string(),
+            Mines::TimekeepersClocktower => "timekeepers_clocktower".to_string(),
+            Mines::ShadowVeil => "shadow_veil".to_string(),
+            Mines::GuttationDripper => "guttation_dripper".to_string(),
+            Mines::GalvanicSurge => "galvanic_surge".to_string(),
+            Mines::UtopicFlower => "utopic_flower".to_string(),
+            Mines::GlitchkingsDomain => "glitchkings_domain".to_string(),
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, EnumIter)]
+pub enum Furnaces {
+    BasicProcessor,
+    LilacProcessor,
+    ExpressPost,
+    TwistingTurbulence,
+    MysticForge,
+    CelestialIncinerator,
+    VortexMelter,
+    VoidShrine,
+    DaydreamReverie,
+    StarlightTransformer,
+    IdyllicFlower,
+    DivineJury,
+    TrackOfEvolution,
+    SnowpondTouch,
+    BloxPortal,
+    TheMothman,
+    TidalTemple,
+    OilDistillery,
+    HandOfPoseidon,
+    CyberApocalypse,
+    SignalTransmitter,
+}
+impl Furnaces {
+    pub fn get_string(&self) -> String {
+        match self {
+            Furnaces::BasicProcessor => "basic_processor".to_string(),
+            Furnaces::LilacProcessor => "lilac_processor".to_string(),
+            Furnaces::ExpressPost => "express_post".to_string(),
+            Furnaces::TwistingTurbulence => "twisting_turbulence".to_string(),
+            Furnaces::MysticForge => "mystic_forge".to_string(),
+            Furnaces::CelestialIncinerator => "celestial_incinerator".to_string(),
+            Furnaces::VortexMelter => "vortex_melter".to_string(),
+            Furnaces::VoidShrine => "void_shrine".to_string(),
+            Furnaces::DaydreamReverie => "daydream_reverie".to_string(),
+            Furnaces::StarlightTransformer => "starlight_transformer".to_string(),
+            Furnaces::IdyllicFlower => "idyllic_flower".to_string(),
+            Furnaces::DivineJury => "divine_jury".to_string(),
+            Furnaces::TrackOfEvolution => "track_of_evolution".to_string(),
+            Furnaces::SnowpondTouch => "snowpond_touch".to_string(),
+            Furnaces::BloxPortal => "blox_portal".to_string(),
+            Furnaces::TheMothman => "the_mothman".to_string(),
+            Furnaces::TidalTemple => "tidal_temple".to_string(),
+            Furnaces::OilDistillery => "oil_distillery".to_string(),
+            Furnaces::HandOfPoseidon => "hand_of_poseidon".to_string(),
+            Furnaces::CyberApocalypse => "cyber_apocalypse".to_string(),
+            Furnaces::SignalTransmitter => "signal_transmitter".to_string(),
         }
     }
 }

@@ -1,5 +1,5 @@
 use super::{
-    enums::{Immunities, Multipliers, Tags, Vulnerabilities},
+    enums::{Immunities, Multipliers, Tags, Upgraders, Vulnerabilities},
     upgrader::Upgrader,
 };
 use crate::utils::mix_vectors_evenly;
@@ -14,6 +14,7 @@ use std::{any::Any, vec};
 #[derive(Debug, Clone)]
 pub struct Ore {
     pub value: f64,
+    pub upgraded_by: Vec<Upgraders>,
     pub multipliers: Vec<Multipliers>,
     pub tags: Vec<Tags>,
     pub immunities: Vec<Immunities>,
@@ -25,6 +26,7 @@ impl Default for Ore {
     fn default() -> Self {
         Self {
             value: 1.0,
+            upgraded_by: vec![],
             multipliers: vec![],
             tags: vec![],
             immunities: vec![],

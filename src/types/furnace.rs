@@ -1,8 +1,17 @@
 use core::num;
-use std::mem;
+use std::{any::Any, collections::HashMap, mem};
+
+use rand::Rng;
+use serde::{Deserialize, Serialize};
+use serde_json::{from_str, Error};
+
+use crate::json_files::file::get_json_text;
 
 use super::{
-    enums::{FurnaceTypes, Modifiers, Multipliers, Tags, RARITY_MULTIPLIERS, RATES_FROM_STANDARD},
+    enums::{
+        FurnaceTypes, Furnaces, Modifiers, Multipliers, Tags, RARITY_MULTIPLIERS,
+        RATES_FROM_STANDARD,
+    },
     ore::{Ore, Ores},
     utils::{Modify, ModifyStandard},
 };
@@ -16,7 +25,7 @@ Need to figure out how to fix this.
 Whole numbers are fine, but decimals are not.
 */
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Furnace {
     pub multiplier: f32,
     pub modifiers: Modifiers,
@@ -35,6 +44,24 @@ impl Default for Furnace {
     }
 }
 impl Furnace {
+    pub fn get_furnace(furnace_name: Furnaces, modifier: Modifiers) -> Result<Furnace, Error> {
+        // Read the JSON file content
+        let file_text = get_json_text("src/json_files/furnaces.json").expect("could not find file");
+
+        // Deserialize the file into a HashMap<String, Furnace>
+        let json_map: HashMap<String, Furnace> = from_str(&file_text).expect("problem with json");
+
+        // Convert the enum variant to a string
+        let key = furnace_name.get_string();
+
+        // Get the Furnace corresponding to the furnace_name
+        let mut furnace = json_map
+            .get(&key)
+            .expect(&format!("Could not find furnace of type {}", key))
+            .clone();
+        furnace.modify(modifier);
+        Ok(furnace)
+    }
     pub fn process_ores(&self, ores: &mut Ores) -> f64 {
         let mut ores = ores.clone();
         for ore in ores.ores.iter_mut() {
@@ -77,6 +104,46 @@ impl Furnace {
                     }
                     FurnaceTypes::ExtraMultiplierEvery(num) => {
                         multiplier += (*num as f64) * (ore.tags.len() as f64);
+                    }
+                    FurnaceTypes::ExtraMultiplierIfMoreThanAmount(num, amount) => {
+                        if ore.tags.len() > *amount as usize {
+                            multiplier *= *num as f64;
+                        }
+                    }
+                    FurnaceTypes::ExtraMultiplierIfUpgradedBy(num, upgrader) => {
+                        if ore
+                            .upgraded_by
+                            .iter()
+                            .any(|up2| up2.type_id() == upgrader.type_id())
+                        {
+                            multiplier *= *num as f64;
+                        }
+                    }
+                    FurnaceTypes::OnlyAccepts(tag) => {
+                        if !ore
+                            .tags
+                            .iter()
+                            .any(|t| mem::discriminant(t) == mem::discriminant(tag))
+                        {
+                            ore.destroy();
+                        }
+                    }
+                    FurnaceTypes::ChanceForEach(value, tag, num) => {
+                        let mut total_value = 0.0;
+                        let mut i = 0;
+                        for t in ore.tags.iter() {
+                            if mem::discriminant(t) == mem::discriminant(tag) {
+                                if rand::thread_rng().gen_ratio(1, 2) {
+                                    total_value += value;
+                                } else {
+                                    total_value -= value;
+                                }
+                                i += 1;
+                            }
+                            if i == *num {
+                                break;
+                            }
+                        }
                     }
                 }
             }

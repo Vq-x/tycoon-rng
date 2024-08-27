@@ -1,19 +1,24 @@
+use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
+use serde_json::{from_str, Error};
+
+use crate::json_files::file::get_json_text;
+
 use super::{
     enums::{
-        Immunities, Modifiers, Multipliers, Tags, Vulnerabilities, MINE_DROP_RATES, MINE_RATES,
-        RARITY_MULTIPLIERS,
+        Immunities, MineTypes, Mines, Modifiers, Multipliers, Tags, Vulnerabilities,
+        MINE_DROP_RATES, MINE_RATES, RARITY_MULTIPLIERS,
     },
     ore::{Ore, Ores},
     utils::Modify,
 };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Mine {
     pub drop_rate: f32,
     pub value: f64,
-    pub adds: Vec<Multipliers>,
-    pub adds_vulnerabilities: Vec<Vulnerabilities>,
-    pub adds_immunities: Vec<Immunities>,
+    pub effects: Vec<MineTypes>,
     pub modifiers: Modifiers,
     pub rarity: u64,
 }
@@ -23,41 +28,60 @@ impl Default for Mine {
         Self {
             drop_rate: 1.0,
             value: 1.0,
-            adds: vec![],
-            adds_vulnerabilities: vec![],
-            adds_immunities: vec![],
+            effects: vec![],
             modifiers: Modifiers::Standard,
             rarity: 1000,
         }
     }
 }
 impl Mine {
-    // pub fn new(
-    //     drop_rate: f32,
-    //     value: f32,
-    //     rarity: u64,
-    //     modifiers: Modifiers,
-    //     adds: Option<Vec<Multipliers>>,
-    //     adds_vulnerabilities: Option<Vec<Vulnerabilities>>,
-    //     adds_immunities: Option<Vec<Tags>>,
-    // ) -> Self {
-    //     Self {
-    //         drop_rate,
-    //         value,
-    //         modifiers,
-    //         rarity,
-    //         adds: adds.unwrap_or_default(),
-    //         adds_vulnerabilities: adds_vulnerabilities.unwrap_or_default(),
-    //         adds_immunities: adds_immunities.unwrap_or_default(),
-    //     }
-    // }
+    pub fn get_mine(mine_name: Mines, modifier: Modifiers) -> Result<Mine, Error> {
+        // Read the JSON file content
+        let file_text = get_json_text("src/json_files/mines.json").expect("could not find file");
+
+        // Deserialize the file into a HashMap<String, Mine>
+        let json_map: HashMap<String, Mine> = from_str(&file_text).expect("problem with json");
+
+        // Convert the enum variant to a string
+        let key = mine_name.get_string();
+
+        // Get the Mine corresponding to the mine_name
+        let mut mine = json_map
+            .get(&key)
+            .expect(&format!("Could not find mine of type {}", key))
+            .clone();
+        mine.modify(modifier);
+        // Return the mine
+        Ok(mine)
+    }
 
     pub fn spawn_ore(&self) -> Ore {
         let value = self.value;
-        let multipliers = &self.adds;
-        let immunities = &self.adds_immunities;
-        let vulnerabilities = &self.adds_vulnerabilities;
-
+        // let multipliers = &self.adds;
+        // let immunities = &self.adds_immunities;
+        // let vulnerabilities = &self.adds_vulnerabilities;
+        let mut multipliers = Vec::new();
+        let mut tags = Vec::new();
+        let mut immunities = Vec::new();
+        let mut vulnerabilities = Vec::new();
+        for effect in self.effects.iter() {
+            match effect {
+                MineTypes::Tag(tag, amount) => {
+                    for _ in 0..*amount {
+                        tags.push(tag.clone());
+                    }
+                }
+                MineTypes::Multiplier(mult) => {
+                    multipliers.push(mult.clone());
+                }
+                MineTypes::Immunity(immunity) => {
+                    immunities.push(immunity.clone());
+                }
+                MineTypes::Vulnerability(vulnerability) => {
+                    vulnerabilities.push(vulnerability.clone());
+                }
+            }
+        }
         // Ore::new(
         //     value,
         //     Some(multipliers.clone()),
@@ -68,9 +92,10 @@ impl Mine {
 
         Ore {
             value,
-            multipliers: multipliers.clone(),
-            immunities: immunities.clone(),
-            vulnerabilities: vulnerabilities.clone(),
+            tags,
+            multipliers,
+            immunities,
+            vulnerabilities,
             ..Default::default()
         }
     }
@@ -78,8 +103,7 @@ impl Mine {
     pub fn spawn_ores(&self, seconds: u16) -> Ores {
         let amount = (seconds as f32 * self.drop_rate).floor();
         let group: Vec<Ore> = (0..amount as u16).map(|_| self.spawn_ore()).collect();
-        let ores = Ores { ores: group };
-        ores
+        Ores { ores: group }
     }
 }
 
