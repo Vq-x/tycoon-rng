@@ -70,6 +70,7 @@ pub enum Vulnerabilities {
     Magnetic,
     Air,
     Time,
+    Aired,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -120,7 +121,7 @@ pub enum Modifiers {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum MineTypes {
     // adds tag
-    Tag(Tags),
+    Tag(Tags, u32),
 
     // adds multiplier
     Multiplier(Multipliers),
@@ -311,6 +312,63 @@ impl Upgraders {
     }
 }
 
+#[derive(Debug, Deserialize, EnumIter)]
+pub enum Mines {
+    IronMine,
+    CopperMine,
+    SilverMine,
+    HeatedDropper,
+    SurgeDropper,
+    Contamination,
+    NaturesEmbrace,
+    WindTurbine,
+    ArcaneRune,
+    RadiantStar,
+    CelestialLight,
+    TheIcicle,
+    CrystalMist,
+    StellarOccultation,
+    RoyalCastlekeep,
+    DigitalWorld,
+    CorrosiveSentinel,
+    FloralObliterator,
+    TimekeepersClocktower,
+    ShadowVeil,
+    GuttationDripper,
+    GalvanicSurge,
+    UtopicFlower,
+    GlitchkingsDomain,
+}
+impl Mines {
+    pub fn get_string(&self) -> String {
+        match self {
+            Mines::IronMine => "iron_mine".to_string(),
+            Mines::CopperMine => "copper_mine".to_string(),
+            Mines::SilverMine => "silver_mine".to_string(),
+            Mines::HeatedDropper => "heated_dropper".to_string(),
+            Mines::SurgeDropper => "surge_dropper".to_string(),
+            Mines::Contamination => "contamination".to_string(),
+            Mines::NaturesEmbrace => "natures_embrace".to_string(),
+            Mines::WindTurbine => "wind_turbine".to_string(),
+            Mines::ArcaneRune => "arcane_rune".to_string(),
+            Mines::RadiantStar => "radiant_star".to_string(),
+            Mines::CelestialLight => "celestial_light".to_string(),
+            Mines::TheIcicle => "the_icicle".to_string(),
+            Mines::CrystalMist => "crystal_mist".to_string(),
+            Mines::StellarOccultation => "stellar_occultation".to_string(),
+            Mines::RoyalCastlekeep => "royal_castlekeep".to_string(),
+            Mines::DigitalWorld => "digital_world".to_string(),
+            Mines::CorrosiveSentinel => "corrosive_sentinel".to_string(),
+            Mines::FloralObliterator => "floral_obliterator".to_string(),
+            Mines::TimekeepersClocktower => "timekeepers_clocktower".to_string(),
+            Mines::ShadowVeil => "shadow_veil".to_string(),
+            Mines::GuttationDripper => "guttation_dripper".to_string(),
+            Mines::GalvanicSurge => "galvanic_surge".to_string(),
+            Mines::UtopicFlower => "utopic_flower".to_string(),
+            Mines::GlitchkingsDomain => "glitchkings_domain".to_string(),
+        }
+    }
+}
 lazy_static! {
     #[derive(Debug)]
     pub static ref MINE_RATES: HashMap<&'static Modifiers, f32> = {

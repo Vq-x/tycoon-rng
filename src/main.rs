@@ -19,47 +19,21 @@ use utils::human_readable;
 
 fn main() {
     let mine = Mine {
-        drop_rate: 1.0,
-        value: 647.5,
-        rarity: 656_000,
-        modifiers: Modifiers::Golden,
-        effects: vec![MineTypes::Multiplier(Multipliers::Vulnerable(2.2))],
-        ..Default::default()
-    };
-    let mut ores = mine.spawn_ores(100);
-    let mine2 = Mine {
-        drop_rate: 5.0,
-        value: 100.0,
-        rarity: 100_000,
-        modifiers: Modifiers::Golden,
+        value: 75.0,
+        drop_rate: 2.3,
+        rarity: 6_617_000,
         effects: vec![
-            MineTypes::Multiplier(Multipliers::Vulnerable(2.2)),
-            MineTypes::Vulnerability(Vulnerabilities::Fire),
-            MineTypes::Vulnerability(Vulnerabilities::Acid),
+            // MineTypes::Vulnerability(Vulnerabilities::Fire),
+            // MineTypes::Vulnerability(Vulnerabilities::Acid),
+            // MineTypes::Vulnerability(Vulnerabilities::Putrid),
+            // MineTypes::Vulnerability(Vulnerabilities::Magnetic),
+            MineTypes::Tag(Tags::Glitch, 1),
+            // MineTypes::Multiplier(Multipliers::Vulnerable(0.0)),
+            // MineTypes::Multiplier(Multipliers::Perfumed(3.6)),
+            // MineTypes::Immunity(Immunities::Acid),
         ],
         ..Default::default()
     };
-    // ores.combine(&mut mine2.spawn_ores(100));
-    let mut upgrader = Upgrader {
-        multiplier: 40.0,
-        modifiers: Modifiers::Standard,
-        rarity: 3660000,
-        effects: vec![UpgraderTypes::Adds(Tags::Vulnerable, 1)],
-    };
-    // ores.upgrade(&upgrader);
-    let upgrader2 = Upgrader::get_upgrader(Upgraders::OreHacker, Modifiers::Standard).unwrap();
-    println!("{:?}", upgrader2);
-    println!("{:?}", human_readable(upgrader2.rarity));
-    // upgrader.modify(Modifiers::Standard);
-    println!("{}", to_string(&upgrader).unwrap());
-
-    println!("total ores count: {:?}", ores.ores.len());
-    println!("{:?}", ores.ores.iter().filter(|ore| ore.destroyed).count());
-    ores.upgrade(&upgrader2);
-    println!(
-        "percent ores destroyed:{:?}",
-        ores.ores.iter().filter(|ore| ore.destroyed).count() as f32 / ores.ores.len() as f32
-            * 100.0
-    );
+    println!("{}", to_string(&mine).unwrap());
     // println!("ores: {:?}", ores.ores);
 }
