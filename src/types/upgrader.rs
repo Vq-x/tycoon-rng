@@ -35,10 +35,7 @@ pub struct Upgrader {
     pub modifiers: Modifiers,
     pub rarity: u64,
     pub effects: Vec<UpgraderTypes>,
-    // pub adds: Vec<Tags>,
-    // pub adds_vulnerabilities: Vec<Vulnerabilities>,
-    // pub removes: Vec<Tags>,
-    // pub destroys: Vec<Tags>,
+    pub upgrader_type: Option<Upgraders>,
 }
 
 impl Upgrader {
@@ -60,6 +57,7 @@ impl Upgrader {
             .clone();
         upgrader.modify(modifier);
         // Return the upgrader
+        upgrader.upgrader_type = Some(upgrader_name.clone());
         Ok(upgrader)
     }
     pub fn upgrade(&self, ore: &mut Ore) {
@@ -256,6 +254,10 @@ impl Upgrader {
             }
         }
         ore.multiply_by(multiplier as f64);
+
+        //push the upgrader type to the ore
+        ore.upgraded_by
+            .push(self.upgrader_type.clone().unwrap_or(Upgraders::OreSoaker));
     }
 }
 
@@ -278,6 +280,7 @@ impl Default for Upgrader {
             modifiers: Modifiers::Standard,
             rarity: 1000,
             effects: vec![],
+            upgrader_type: None,
             // adds: vec![],
             // adds_vulnerabilities: vec![],
             // removes: vec![],

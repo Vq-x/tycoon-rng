@@ -207,16 +207,26 @@ pub enum FurnaceTypes {
     // Extra Multiplier for every Tag: 0.1x
     ExtraMultiplierEvery(f32),
 
+    //Extra 5x if the ore was previously upgraded by Paradisiac Flower
+    ExtraMultiplierIfUpgradedBy(f32, Upgraders),
+
+    // Extra Multiplier if more than 1 Tag on ore: 1.1x
+    ExtraMultiplierIfMoreThanAmount(f32, u32),
+
     //Multiplies ores based on how many wet tags they have, if there are no wet tags then it will be processed at 1
     MultipliesByTag(Tags, f32),
 
     // +/- 0.2x value for each Glitch (tag) (up to 6)
+    ChanceForEach(f32, Tags, u8),
 
     // +0.5x for each tag
     AddForEach(f32, Tags),
+
+    // Only Accepts Putrid ores
+    OnlyAccepts(Tags),
 }
 
-#[derive(Debug, Deserialize, EnumIter)]
+#[derive(Debug, Deserialize, Serialize, Clone, EnumIter)]
 pub enum Upgraders {
     OreSoaker,
     OrePolisher,
@@ -369,6 +379,59 @@ impl Mines {
         }
     }
 }
+
+#[derive(Debug, Deserialize, EnumIter)]
+pub enum Furnaces {
+    BasicProcessor,
+    LilacProcessor,
+    ExpressPost,
+    TwistingTurbulence,
+    MysticForge,
+    CelestialIncinerator,
+    VortexMelter,
+    VoidShrine,
+    DaydreamReverie,
+    StarlightTransformer,
+    IdyllicFlower,
+    DivineJury,
+    TrackOfEvolution,
+    SnowpondTouch,
+    BloxPortal,
+    TheMothman,
+    TidalTemple,
+    OilDistillery,
+    HandOfPoseidon,
+    CyberApocalypse,
+    SignalTransmitter,
+}
+impl Furnaces {
+    pub fn get_string(&self) -> String {
+        match self {
+            Furnaces::BasicProcessor => "basic_processor".to_string(),
+            Furnaces::LilacProcessor => "lilac_processor".to_string(),
+            Furnaces::ExpressPost => "express_post".to_string(),
+            Furnaces::TwistingTurbulence => "twisting_turbulence".to_string(),
+            Furnaces::MysticForge => "mystic_forge".to_string(),
+            Furnaces::CelestialIncinerator => "celestial_incinerator".to_string(),
+            Furnaces::VortexMelter => "vortex_melter".to_string(),
+            Furnaces::VoidShrine => "void_shrine".to_string(),
+            Furnaces::DaydreamReverie => "daydream_reverie".to_string(),
+            Furnaces::StarlightTransformer => "starlight_transformer".to_string(),
+            Furnaces::IdyllicFlower => "idyllic_flower".to_string(),
+            Furnaces::DivineJury => "divine_jury".to_string(),
+            Furnaces::TrackOfEvolution => "track_of_evolution".to_string(),
+            Furnaces::SnowpondTouch => "snowpond_touch".to_string(),
+            Furnaces::BloxPortal => "blox_portal".to_string(),
+            Furnaces::TheMothman => "the_mothman".to_string(),
+            Furnaces::TidalTemple => "tidal_temple".to_string(),
+            Furnaces::OilDistillery => "oil_distillery".to_string(),
+            Furnaces::HandOfPoseidon => "hand_of_poseidon".to_string(),
+            Furnaces::CyberApocalypse => "cyber_apocalypse".to_string(),
+            Furnaces::SignalTransmitter => "signal_transmitter".to_string(),
+        }
+    }
+}
+
 lazy_static! {
     #[derive(Debug)]
     pub static ref MINE_RATES: HashMap<&'static Modifiers, f32> = {

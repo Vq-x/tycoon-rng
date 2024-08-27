@@ -18,22 +18,16 @@ use types::{
 use utils::human_readable;
 
 fn main() {
-    let mine = Mine {
-        value: 75.0,
-        drop_rate: 2.3,
-        rarity: 6_617_000,
+    let furnace = Furnace {
+        multiplier: 47.0,
+        rarity: 101_100,
         effects: vec![
-            // MineTypes::Vulnerability(Vulnerabilities::Fire),
-            // MineTypes::Vulnerability(Vulnerabilities::Acid),
-            // MineTypes::Vulnerability(Vulnerabilities::Putrid),
-            // MineTypes::Vulnerability(Vulnerabilities::Magnetic),
-            MineTypes::Tag(Tags::Glitch, 1),
-            // MineTypes::Multiplier(Multipliers::Vulnerable(0.0)),
-            // MineTypes::Multiplier(Multipliers::Perfumed(3.6)),
-            // MineTypes::Immunity(Immunities::Acid),
+            FurnaceTypes::MultiplyIf(1.6, Tags::Magnetic),
+            FurnaceTypes::MultiplyIf(1.6, Tags::Fire(1.0)),
+            FurnaceTypes::MultiplyIf(0.2, Tags::Fueled),
         ],
         ..Default::default()
     };
-    println!("{}", to_string(&mine).unwrap());
+    println!("{}", to_string(&furnace).unwrap());
     // println!("ores: {:?}", ores.ores);
 }
